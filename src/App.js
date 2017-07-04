@@ -7,6 +7,20 @@ import Chart from "./Chart";
 import { Grid, Row, Col, Navbar } from "react-bootstrap";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { value: 1000 };
+
+    //this is required in order to use this correct in the event handler
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e) {
+    console.log(e);
+    this.setState({ value: e.target.value });
+  }
+
   render() {
     return (
       <div>
@@ -23,13 +37,13 @@ class App extends Component {
         <Grid>
           <Row>
             <Col md={4}>
-              <Inputs />
+              <Inputs handleChange={this.handleChange} moneyObj={this.state} />
             </Col>
             <Col md={8}>
-              <OutputTable />
+              <OutputTable moneyObj={this.state} />
             </Col>
           </Row>
-            <Chart />
+          <Chart />
           <Row />
         </Grid>
       </div>
