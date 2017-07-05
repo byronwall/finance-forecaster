@@ -55,7 +55,7 @@ class App extends Component {
               <MortgageInput handleChange={this.handleMortgageChange} mortgageObj={this.state.mortgage} />
             </Col>
             <Col md={8}>
-              <OutputTable moneyObj={this.state.income} />
+              <OutputTable moneyObj={this.state.income} mortgageObj={this.state.mortgage}/>
             </Col>
           </Row>
           <Chart />
