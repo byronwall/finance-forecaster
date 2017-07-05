@@ -6,8 +6,8 @@ export default class OutputTable extends Component {
     
     let amounts = [];
 
-    for (var i = 1; i <= 10; i++) {
-      amounts.push(i * this.props.moneyObj.value);
+    for (var i = 1; i <= 20; i++) {
+      amounts.push(i * this.props.moneyObj);
     }
 
     return (
@@ -30,7 +30,7 @@ export default class OutputTable extends Component {
               {amounts.map((amount, index) => (
                 <tr>
                   <td>{index}</td>
-                  <td>{this.props.moneyObj.value}</td>
+                  <td>{this.props.moneyObj}</td>
                   <td>{amount}</td>
                 </tr>
               ))}

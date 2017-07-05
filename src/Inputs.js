@@ -9,7 +9,7 @@ export default class Inputs extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
   handleChange(e) {
-    this.props.handleChange(e);
+    this.props.handleChange({ income: e.target.value });
   }
 
   render() {
@@ -23,7 +23,7 @@ export default class Inputs extends Component {
               <ControlLabel>Enter a monthly income</ControlLabel>
               <FormControl
                 type="text"
-                value={this.props.moneyObj.value}
+                value={this.props.moneyObj}
                 placeholder="Enter text"
                 onChange={this.handleChange}
               />
