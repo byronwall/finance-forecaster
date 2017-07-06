@@ -66,7 +66,9 @@ export default class OutputTable extends Component {
     let totalIndex = 0;
     for (var year = 0; year < newAmounts.length; year++) {
       for (var month = 0; month < 12; month++) {
-        recurringAmounts.forEach(function (element) {
+
+        for (var el_index = 0; el_index < recurringAmounts.length; el_index++) {
+          let element = recurringAmounts[el_index];
           //if the freq is zero then add the amount
           if (totalIndex % element.frequency === 0) {
             newAmounts[year].recurring += element.amount;
@@ -74,7 +76,7 @@ export default class OutputTable extends Component {
             recurringRunningTotal += element.amount;
           }
 
-        }, this);
+        }
         totalIndex++;
       }
       //console.log("end of year", recurringRunningTotal);

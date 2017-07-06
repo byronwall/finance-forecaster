@@ -15,16 +15,24 @@ export default class RecurringInput extends Component {
     }
 
     handleAmount(e) {
+
+        let amount = Number.parseFloat(e.target.value)
+        amount = Number.isNaN(amount) ? 0 : amount;
+
         this.props.handleChange({
             id: this.props.id,
-            amount: Number.parseFloat(e.target.value),
+            amount: amount,
             key: "amount"
         })
     }
     handleFreq(e) {
+
+        let amount = Number.parseFloat(e.target.value)
+        amount = Number.isNaN(amount) ? 0 : amount;
+
         this.props.handleChange({
             id: this.props.id,
-            frequency: Number.parseFloat(e.target.value),
+            frequency: amount,
             key: "frequency"
         })
     }
