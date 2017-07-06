@@ -18,8 +18,8 @@ class App extends Component {
         term: 30
       },
       recurringAmounts: [
-        { amount: 2000, frequency: 1 },
-        { amount: -800, frequency: 1 }
+        { amount: 2000, frequency: 1, delay:0 },
+        { amount: -800, frequency: 1, delay:0 }
       ]
     };
 

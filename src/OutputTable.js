@@ -70,7 +70,9 @@ export default class OutputTable extends Component {
         for (var el_index = 0; el_index < recurringAmounts.length; el_index++) {
           let element = recurringAmounts[el_index];
           //if the freq is zero then add the amount
-          if (totalIndex % element.frequency === 0) {
+          if (totalIndex % element.frequency === 0 &&
+            totalIndex >= element.delay
+          ) {
             newAmounts[year].recurring += element.amount;
 
             recurringRunningTotal += element.amount;

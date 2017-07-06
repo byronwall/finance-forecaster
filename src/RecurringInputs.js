@@ -17,7 +17,7 @@ export default class RecurringInputs extends Component {
 
     handleChange(obj) {
         //this will just pass the event through
-        this.props.handleChange( obj )
+        this.props.handleChange(obj)
     }
 
     render() {
@@ -27,14 +27,27 @@ export default class RecurringInputs extends Component {
         return (
             <div>
                 <Panel header="Recurring Inputs">
-                    {
-                        inputs.map((inputData, index) => (
-                            <RecurringInput
-                                input={inputData}
-                                key={index} id={index}
-                                handleChange={this.handleChange} />
-                        ))
-                    }
+                    <form>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>amount</th>
+                                    <th>frequency</th>
+                                    <th>start/delay (months)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    inputs.map((inputData, index) => (
+                                        <RecurringInput
+                                            input={inputData}
+                                            key={index} id={index}
+                                            handleChange={this.handleChange} />
+                                    ))
+                                }
+                            </tbody>
+                        </table>
+                    </form>
                 </Panel>
             </div>
         );
