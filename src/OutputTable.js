@@ -6,32 +6,43 @@ export default class OutputTable extends Component {
 
     let amounts = this.calculateMortgage(this.props.mortgageObj);
 
+    //console.log("amounts", amounts);
+
+    let recurringAmounts = this.props.recurringAmounts;
+    //console.log("recurring", recurringAmounts);
+
+    amounts = this.calculateRecurring(amounts, recurringAmounts);
+
     return (
       <div>
         <Panel header="Output">
 
           <div>
-            <p>this is a very rough table based on that value.. for testing</p>
 
             {//TODO put this Table into its own component
             }
             <Table striped bordered hover>
               <thead>
                 <tr>
-                  <th>month</th>
+                  <th>year</th>
                   <th>interest amount</th>
                   <th>balance remaining</th>
+                  <th>recurring</th>
+                  <th>recurring running</th>
                 </tr>
               </thead>
-              {amounts.map((amount, index) => (
-                <tr>
-                  <td>{amount.month}</td>
-                  <td>{amount.interestMonth.toFixed(2)}</td>
-                  <td>{amount.balance.toFixed(2)}</td>
-                </tr>
-              ))}
+              <tbody>
+                {amounts.map((amount, index) => (
+                  <tr key={index}>
+                    <td>{amount.year}</td>
+                    <td>{amount.interestMonth.toFixed(0)}</td>
+                    <td>{amount.balance.toFixed(0)}</td>
+                    <td>{amount.recurring.toFixed(0)}</td>
+                    <td>{amount.recurringTotal.toFixed(0)}</td>
+                  </tr>
+                ))}
 
-              <tbody />
+              </tbody>
             </Table>
 
           </div>
@@ -40,6 +51,42 @@ export default class OutputTable extends Component {
       </div>
     );
   }
+
+  calculateRecurring(amounts, recurringAmounts) {
+
+    console.log("amounts incoming", amounts);
+    let newAmounts = amounts;
+
+    //the amounts will be year-indexed
+
+    //recurring amounts is an array of {amount, freq} objects
+    let recurringRunningTotal = 0;
+
+
+    let totalIndex = 0;
+    for (var year = 0; year < newAmounts.length; year++) {
+      for (var month = 0; month < 12; month++) {
+        recurringAmounts.forEach(function (element) {
+          //if the freq is zero then add the amount
+          if (totalIndex % element.frequency === 0) {
+            newAmounts[year].recurring += element.amount;
+
+            recurringRunningTotal += element.amount;
+          }
+
+        }, this);
+        totalIndex++;
+      }
+      //console.log("end of year", recurringRunningTotal);
+      newAmounts[year].recurringTotal = recurringRunningTotal;
+
+      //console.log("result", year, newAmounts[year]);
+    }
+
+    return newAmounts;
+
+  }
+
   calculateMortgage(mortgageObj) {
 
     const rate = mortgageObj.rate;
@@ -54,22 +101,28 @@ export default class OutputTable extends Component {
 
     let payments = [];
 
-    for (var month = 0; month < years * 12; month++) {
-      //need to compute the remaining balance, interest, next month
-      let interestMonth = monthlyRatePct * balance;
+    for (var year = 0; year < years; year++) {
 
-      balance -= monthlyPayment - interestMonth;
+      let annualInterest = 0;
+
+      for (var month = 0; month < 12; month++) {
+        //need to compute the remaining balance, interest, next month
+        let interestMonth = monthlyRatePct * balance;
+        annualInterest += interestMonth;
+        balance -= monthlyPayment - interestMonth;
+      }
 
       payments.push({
-        month: month,
-        interestMonth: interestMonth,
-        balance: balance
+        year: year,
+        interestMonth: annualInterest,
+        balance: balance,
+        recurring: 0,
+        recurringTotal: 0
       });
 
     }
-    console.log(payments);
+    console.log("payments", payments);
 
     return payments;
-
   }
 }

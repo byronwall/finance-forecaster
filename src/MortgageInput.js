@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Panel, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 
-export default class Inputs extends Component {
+export default class MortgageInput extends Component {
     constructor(props) {
         super(props);
 
@@ -12,13 +12,19 @@ export default class Inputs extends Component {
     }
 
     handleTerm(e) {
-        this.props.handleChange({ term: e.target.value })
+        this.props.handleChange({
+            term: Number.parseFloat(e.target.value)
+        })
     }
     handleRate(e) {
-        this.props.handleChange({ rate: e.target.value })
+        this.props.handleChange({
+            rate: Number.parseFloat(e.target.value)
+        })
     }
     handleStart(e) {
-        this.props.handleChange({ start: e.target.value })
+        this.props.handleChange({
+            start: Number.parseFloat(e.target.value)
+        })
     }
 
     render() {
