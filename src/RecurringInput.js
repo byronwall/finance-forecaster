@@ -1,14 +1,9 @@
 import React, { Component } from "react";
-import { Panel, FormGroup, Glyphicon, FormControl } from "react-bootstrap";
-
-//this will support an amount and frequency
-
-//will add support for start time to delay event
+import { FormGroup, Glyphicon, FormControl } from "react-bootstrap";
 
 export default class RecurringInput extends Component {
 
     handleChange(e, key) {
-
         console.log("recurring input", e, key);
 
         let amount = Number.parseFloat(e.target.value)
@@ -19,7 +14,6 @@ export default class RecurringInput extends Component {
             [key]: amount,
             key
         })
-
     }
 
     render() {
@@ -27,7 +21,6 @@ export default class RecurringInput extends Component {
 
         return (
             <tr>
-
                 <td>
                     <FormGroup>
                         <FormControl
@@ -35,7 +28,6 @@ export default class RecurringInput extends Component {
                             value={inputData.amount}
                             placeholder="Starting amount"
                             onChange={(e) => { this.handleChange(e, "amount") }}
-                            style={{ "max-width": "100px" }}
                         />
                     </FormGroup>
                 </td>
@@ -47,7 +39,6 @@ export default class RecurringInput extends Component {
                             value={inputData.frequency}
                             placeholder="Rate"
                             onChange={(e) => { this.handleChange(e, "frequency") }}
-                            style={{ "max-width": "100px" }}
                         />
                     </FormGroup>
                 </td>
@@ -58,17 +49,14 @@ export default class RecurringInput extends Component {
                             value={inputData.delay}
                             placeholder="Delay"
                             onChange={(e) => { this.handleChange(e, "delay") }}
-                            style={{ "max-width": "100px" }}
                         />
                     </FormGroup>
                 </td>
 
                 <td>
-                    <div
-                        onClick={(e) => this.handleChange(e, "remove")}
-                    >
+                    <div onClick={(e) => this.handleChange(e, "remove")}>
                         <Glyphicon glyph="remove" />
-                        </div>
+                    </div>
                 </td>
             </tr>
         );

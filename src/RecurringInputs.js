@@ -3,10 +3,6 @@ import { Panel, Button, Glyphicon } from "react-bootstrap";
 
 import RecurringInput from "./RecurringInput";
 
-//props will be an array of recurring input types
-
-//this will hold all of the recurring inputs
-
 export default class RecurringInputs extends Component {
     constructor(props) {
         super(props);
