@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import { Panel, Button, Glyphicon } from "react-bootstrap";
+import { Panel } from "react-bootstrap";
 
-import RecurringInput from "./RecurringInput";
+import MortgageInput from "./MortgageInput";
 
 //props will be an array of recurring input types
 
 //this will hold all of the recurring inputs
 
-export default class RecurringInputs extends Component {
+export default class MortgageInputs extends Component {
     constructor(props) {
         super(props);
 
@@ -26,31 +26,26 @@ export default class RecurringInputs extends Component {
 
         return (
             <div>
-                <Panel header="Recurring Inputs">
+                <Panel header="Loan Inputs">
                     <form>
                         <table>
                             <thead>
                                 <tr>
-                                    <th>amount</th>
-                                    <th>frequency</th>
-                                    <th>start/delay (months)</th>
-                                    <th></th>
+                                    <th>principal</th>
+                                    <th>yearly rate</th>
+                                    <th>term</th>
+                                    <th>delay</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {
                                     inputs.map((inputData, index) => (
-                                        <RecurringInput
+                                        <MortgageInput
                                             input={inputData}
-                                            key={inputData.id} id={inputData.id}
+                                            key={index} id={index}
                                             handleChange={this.handleChange} />
                                     ))
                                 }
-                                <tr>
-                                    <Button onClick={(e) => this.handleChange({ key: "add" })}>
-                                         <Glyphicon glyph="plus" />
-                                    </Button>
-                                </tr>
                             </tbody>
                         </table>
                     </form>

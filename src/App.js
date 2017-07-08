@@ -2,8 +2,8 @@ import React, { Component } from "react";
 
 import OutputTable from "./OutputTable";
 import Chart from "./Chart";
-import MortgageInput from "./MortgageInput";
 import RecurringInputs from "./RecurringInputs";
+import MortgageInputs from "./MortgageInputs";
 
 import { Grid, Row, Col, Navbar } from "react-bootstrap";
 
@@ -12,34 +12,70 @@ class App extends Component {
     super(props);
 
     this.state = {
-      mortgage: {
-        rate: 3.87, 
-        start: 200000,
-        term: 30
-      },
+      loans: [
+        { rate: 3.87, amount: 200000, term: 30, delay: 0, id: 1 }
+      ],
       recurringAmounts: [
-        { amount: 2000, frequency: 1, delay:0 },
-        { amount: -800, frequency: 1, delay:0 }
+        { amount: 2000, frequency: 1, delay: 0, id: 1 },
+        { amount: -800, frequency: 1, delay: 0, id: 2 }
       ]
     };
 
-    //this is required in order to use this correct in the event handler
+    //this is required i order to use this correct in the event handler
     this.handleMortgageChange = this.handleMortgageChange.bind(this);
     this.handleRecurringChange = this.handleRecurringChange.bind(this);
   }
 
   handleMortgageChange(obj) {
     console.log(obj);
-    this.setState({ mortgage: { ...this.state.mortgage, ...obj } })
+
+    console.log("current state", this.state.loans);
+    let newState = this.state.loans;
+
+    if (obj.key === "add") {
+      //this will add a new item
+      const id = newState.reduce((acc, cur) => Math.max(acc, cur.id), 0);
+
+      newState.push({ amount: 0, frequency: 1, delay: 0, id });
+
+    } else if (obj.key === "remove") {
+      //this will remove the given item
+      newState = newState.filter((el) => {
+        return el.id !== obj.id;
+      });
+    }
+    else {
+      newState[obj.id][obj.key] = obj[obj.key];
+      console.log("new state", newState);
+    }
+
+    this.setState({ loans: newState });
   }
+
   handleRecurringChange(obj) {
-    console.log(obj);
+    console.log("recurring", obj);
 
     console.log("current state", this.state.recurringAmounts);
     let newState = this.state.recurringAmounts;
 
-    newState[obj.id][obj.key] = obj[obj.key];
-    console.log("new state", newState);
+    if (obj.key === "add") {
+      const id = newState.reduce((acc, cur) => Math.max(acc, cur.id), 0) + 1;
+      console.log("new id", id);
+      newState.push({ amount: 0, frequency: 1, delay: 0, id });
+
+    } else if (obj.key === "remove") {
+      //this will remove the given item
+      newState = newState.filter((el) => {
+        return el.id !== obj.id;
+      });
+    } else {
+
+      newState = newState.map((el) => {
+        return (el.id === obj.id) ? { ...el, ...{ [obj.key]: obj[obj.key] } } : el;
+      });
+
+      console.log("new state", newState);
+    }
 
     this.setState({ recurringAmounts: newState });
   }
@@ -59,14 +95,14 @@ class App extends Component {
         </Navbar>
         <Grid>
           <Row>
-            <Col md={4}>
-              <MortgageInput handleChange={this.handleMortgageChange} mortgageObj={this.state.mortgage} />
+            <Col md={5}>
+              <MortgageInputs handleChange={this.handleMortgageChange} inputs={this.state.loans} />
               <RecurringInputs inputs={this.state.recurringAmounts} handleChange={this.handleRecurringChange} />
             </Col>
-            <Col md={8}>
+            <Col md={7}>
               <OutputTable
                 moneyObj={this.state.income}
-                mortgageObj={this.state.mortgage}
+                mortgageObj={this.state.loans}
                 recurringAmounts={this.state.recurringAmounts}
               />
             </Col>
