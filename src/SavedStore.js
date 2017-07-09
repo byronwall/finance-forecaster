@@ -9,6 +9,7 @@ export default class SavedStore extends Component {
             key
         })
 
+        //this ensure the remove event does not trigger a load event also
         e.stopPropagation();
     }
 
