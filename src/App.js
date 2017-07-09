@@ -4,6 +4,9 @@ import OutputTable from "./OutputTable";
 import Chart from "./Chart";
 import RecurringInputs from "./RecurringInputs";
 import MortgageInputs from "./MortgageInputs";
+import SavedStores from "./SavedStores";
+
+import * as store from "store";
 
 import { Grid, Row, Col, Navbar } from "react-bootstrap";
 
@@ -18,12 +21,18 @@ class App extends Component {
       recurringAmounts: [
         { amount: 2000, frequency: 1, delay: 0, id: 1 },
         { amount: -800, frequency: 1, delay: 0, id: 2 }
-      ]
+      ],
+      savedObj: this.getSavedObj()
     };
 
     //this is required i order to use this correct in the event handler
     this.handleMortgageChange = this.handleMortgageChange.bind(this);
     this.handleRecurringChange = this.handleRecurringChange.bind(this);
+    this.handleStoreChange = this.handleStoreChange.bind(this);
+  }
+
+  getSavedObj() {
+    return store.get("savedState") || [];
   }
 
   handleMortgageChange(obj) {
@@ -80,6 +89,57 @@ class App extends Component {
     this.setState({ recurringAmounts: newState });
   }
 
+  handleStoreChange(obj) {
+    console.log("handleStoreChange", obj);
+
+    console.log("current state", this.state.recurringAmounts);
+
+    if (obj.key === "remove") {
+      //this will remove the given item
+
+      let savedObj = this.state.savedObj;
+
+      savedObj = savedObj.filter((el) => {
+        return el.name !== obj.id;
+      });
+
+      console.log("new savedObj", savedObj);
+
+      this.setState({savedObj});
+      store.set("savedState", savedObj);
+
+    } else if (obj.key === "save") {
+      console.log("saving the state");
+
+      //take the current state (excluding the saved state obj)
+      let savedState = { ...this.state };
+      delete savedState.savedObj;
+
+      let saveName = window.prompt("Enter a name for saving");
+
+      //put into a new object
+
+      let saveData = { name: saveName, data: savedState };
+      let savedObj = [...this.state.savedObj, saveData];
+
+      store.set("savedState", savedObj);
+
+      this.setState({ savedObj: savedObj })
+      //put that object into a store
+    } else if (obj.key === "load") {
+      //iterate through the saved ones for the id
+      console.log("loading the saved state")
+      let matches = this.state.savedObj.filter((item) => item.name === obj.id)
+
+      console.log(matches);
+      console.log({ ...matches[0].data })
+
+      this.setState({ ...matches[0].data });
+
+      //push that data into the current state
+    }
+  }
+
   render() {
     return (
       <div>
@@ -94,6 +154,14 @@ class App extends Component {
           </Grid>
         </Navbar>
         <Grid>
+          <Row >
+            <Col md={12}>
+              <SavedStores
+                inputs={this.state.savedObj}
+                handleChange={this.handleStoreChange}
+              />
+            </Col>
+          </Row>
           <Row>
             <Col md={5}>
               <MortgageInputs handleChange={this.handleMortgageChange} inputs={this.state.loans} />
