@@ -1,9 +1,10 @@
-import React, { Component } from "react";
+import * as React from 'react';
+import { Component } from "react";
 import { FormGroup, Glyphicon, FormControl } from "react-bootstrap";
 
-export default class RecurringInput extends Component {
+export default class RecurringInput extends Component<any, any> {
 
-    handleChange(e, key) {
+    handleChange(e: any, key: string) {
         console.log("recurring input", e, key);
 
         let amount = Number.parseFloat(e.target.value)

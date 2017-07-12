@@ -1,9 +1,10 @@
-import React, { Component } from "react";
+import * as React from 'react';
+import { Component } from "react";
 import { FormGroup, FormControl } from "react-bootstrap";
 
-export default class MortgageInput extends Component {
+export default class MortgageInput extends Component<any, any> {
 
-    handleChange(e, key) {
+    handleChange(e: any, key: any) {
 
         let amount = Number.parseFloat(e.target.value)
         amount = Number.isNaN(amount) ? 0 : amount;

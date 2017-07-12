@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import * as React from "react";
+import { Component } from "react";
 
 import OutputTable from "./OutputTable";
 import Chart from "./Chart";
@@ -10,8 +11,8 @@ import * as store from "store";
 
 import { Grid, Row, Col, Navbar } from "react-bootstrap";
 
-class App extends Component {
-  constructor(props) {
+class App extends Component<any, any> {
+  constructor(props: any) {
     super(props);
 
     this.state = {
@@ -25,7 +26,7 @@ class App extends Component {
       savedObj: this.getSavedObj()
     };
 
-    //this is required i order to use this correct in the event handler
+    // this is required i order to use this correct in the event handler
     this.handleMortgageChange = this.handleMortgageChange.bind(this);
     this.handleRecurringChange = this.handleRecurringChange.bind(this);
     this.handleStoreChange = this.handleStoreChange.bind(this);
@@ -35,25 +36,24 @@ class App extends Component {
     return store.get("savedState") || [];
   }
 
-  handleMortgageChange(obj) {
+  handleMortgageChange(obj: any) {
     console.log(obj);
 
     console.log("current state", this.state.loans);
     let newState = this.state.loans;
 
     if (obj.key === "add") {
-      //this will add a new item
-      const id = newState.reduce((acc, cur) => Math.max(acc, cur.id), 0);
+      // this will add a new item
+      const id = newState.reduce((acc: any, cur: any) => Math.max(acc, cur.id), 0);
 
       newState.push({ amount: 0, frequency: 1, delay: 0, id });
 
     } else if (obj.key === "remove") {
-      //this will remove the given item
-      newState = newState.filter((el) => {
+      // this will remove the given item
+      newState = newState.filter((el: any) => {
         return el.id !== obj.id;
       });
-    }
-    else {
+    } else {
       newState[obj.id][obj.key] = obj[obj.key];
       console.log("new state", newState);
     }
@@ -61,25 +61,25 @@ class App extends Component {
     this.setState({ loans: newState });
   }
 
-  handleRecurringChange(obj) {
+  handleRecurringChange(obj:any) {
     console.log("recurring", obj);
 
     console.log("current state", this.state.recurringAmounts);
     let newState = this.state.recurringAmounts;
 
     if (obj.key === "add") {
-      const id = newState.reduce((acc, cur) => Math.max(acc, cur.id), 0) + 1;
+      const id = newState.reduce((acc:any, cur:any) => Math.max(acc, cur.id), 0) + 1;
       console.log("new id", id);
       newState.push({ amount: 0, frequency: 1, delay: 0, id });
 
     } else if (obj.key === "remove") {
-      //this will remove the given item
-      newState = newState.filter((el) => {
+      // this will remove the given item
+      newState = newState.filter((el:any) => {
         return el.id !== obj.id;
       });
     } else {
 
-      newState = newState.map((el) => {
+      newState = newState.map((el:any) => {
         return (el.id === obj.id) ? { ...el, ...{ [obj.key]: obj[obj.key] } } : el;
       });
 
@@ -89,35 +89,35 @@ class App extends Component {
     this.setState({ recurringAmounts: newState });
   }
 
-  handleStoreChange(obj) {
+  handleStoreChange(obj:any) {
     console.log("handleStoreChange", obj);
 
     console.log("current state", this.state.recurringAmounts);
 
     if (obj.key === "remove") {
-      //this will remove the given item
+      // this will remove the given item
 
       let savedObj = this.state.savedObj;
 
-      savedObj = savedObj.filter((el) => {
+      savedObj = savedObj.filter((el:any) => {
         return el.name !== obj.id;
       });
 
       console.log("new savedObj", savedObj);
 
-      this.setState({savedObj});
+      this.setState({ savedObj });
       store.set("savedState", savedObj);
 
     } else if (obj.key === "save") {
       console.log("saving the state");
 
-      //take the current state (excluding the saved state obj)
+      // take the current state (excluding the saved state obj)
       let savedState = { ...this.state };
       delete savedState.savedObj;
 
       let saveName = window.prompt("Enter a name for saving");
 
-      //put into a new object
+      // put into a new object
 
       let saveData = { name: saveName, data: savedState };
       let savedObj = [...this.state.savedObj, saveData];
@@ -125,18 +125,18 @@ class App extends Component {
       store.set("savedState", savedObj);
 
       this.setState({ savedObj: savedObj })
-      //put that object into a store
+      // put that object into a store
     } else if (obj.key === "load") {
-      //iterate through the saved ones for the id
-      console.log("loading the saved state")
-      let matches = this.state.savedObj.filter((item) => item.name === obj.id)
+      // iterate through the saved ones for the id
+      console.log("loading the saved state");
+      let matches = this.state.savedObj.filter((item:any) => item.name === obj.id);
 
       console.log(matches);
-      console.log({ ...matches[0].data })
+      console.log({ ...matches[0].data });
 
       this.setState({ ...matches[0].data });
 
-      //push that data into the current state
+      // push that data into the current state
     }
   }
 

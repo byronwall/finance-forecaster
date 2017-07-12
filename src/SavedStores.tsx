@@ -1,19 +1,20 @@
-import React, { Component } from "react";
-import { Panel, ListGroup, Button } from "react-bootstrap";
+import * as React from 'react';
+import { Component } from 'react';
+import { Panel, ListGroup, Button } from 'react-bootstrap';
 
-import SavedStore from "./SavedStore";
+import SavedStore from './SavedStore';
 
-export default class SavedStores extends Component {
-    constructor(props) {
+export default class SavedStores extends Component<any, any> {
+    constructor(props: any) {
         super(props);
 
-        //this is required in order to use this correct in the event handler
+        // this is required in order to use this correct in the event handler
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange(obj) {
-        //this will just pass the event through
-        this.props.handleChange(obj)
+    handleChange(obj: any) {
+        // this will just pass the event through
+        this.props.handleChange(obj);
     }
 
     render() {
@@ -25,7 +26,7 @@ export default class SavedStores extends Component {
                 <Panel header="Saved Stores">
                     <ListGroup >
                         {
-                            inputs.map((input) => (
+                            inputs.map((input: any) => (
                                 <SavedStore
                                     input={input}
                                     handleChange={this.handleChange}
@@ -34,7 +35,7 @@ export default class SavedStores extends Component {
                             ))
                         }
                     </ListGroup>
-                    <Button onClick={(e) => { this.handleChange({ key: "save" }) }}>
+                    <Button onClick={(e) => { this.handleChange({ key: 'save' }); }}>
                         <p>save current</p>
                     </Button>
                 </Panel>

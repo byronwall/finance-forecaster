@@ -1,9 +1,10 @@
-import React, { Component } from "react";
+import * as React from 'react';
+import { Component } from "react";
 import { ListGroupItem, Glyphicon } from "react-bootstrap";
 
-export default class SavedStore extends Component {
+export default class SavedStore extends Component<any, any> {
 
-    handleChange(e, key) {
+    handleChange(e: any, key: string) {
         this.props.handleChange({
             id: this.props.id,
             key

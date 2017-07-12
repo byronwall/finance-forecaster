@@ -1,19 +1,20 @@
-import React, { Component } from "react";
-import { Panel, Button, Glyphicon } from "react-bootstrap";
+import * as React from 'react';
+import { Component } from 'react';
+import { Panel, Button, Glyphicon } from 'react-bootstrap';
 
-import RecurringInput from "./RecurringInput";
+import RecurringInput from './RecurringInput';
 
-export default class RecurringInputs extends Component {
-    constructor(props) {
+export default class RecurringInputs extends Component<any, any> {
+    constructor(props: any) {
         super(props);
 
-        //this is required in order to use this correct in the event handler
+        // this is required in order to use this correct in the event handler
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange(obj) {
-        //this will just pass the event through
-        this.props.handleChange(obj)
+    handleChange(obj: any) {
+        // this will just pass the event through
+        this.props.handleChange(obj);
     }
 
     render() {
@@ -35,16 +36,18 @@ export default class RecurringInputs extends Component {
                             </thead>
                             <tbody>
                                 {
-                                    inputs.map((inputData, index) => (
+                                    inputs.map((inputData: any, index: any) => (
                                         <RecurringInput
                                             input={inputData}
-                                            key={inputData.id} id={inputData.id}
-                                            handleChange={this.handleChange} />
+                                            key={inputData.id}
+                                            id={inputData.id}
+                                            handleChange={this.handleChange}
+                                        />
                                     ))
                                 }
                                 <tr>
-                                    <Button onClick={(e) => this.handleChange({ key: "add" })}>
-                                         <Glyphicon glyph="plus" />
+                                    <Button onClick={(e) => this.handleChange({ key: 'add' })}>
+                                        <Glyphicon glyph="plus" />
                                     </Button>
                                 </tr>
                             </tbody>

@@ -1,23 +1,24 @@
-import React, { Component } from "react";
+import * as React from "react";
+import { Component } from "react";
 import { Panel } from "react-bootstrap";
 
 import MortgageInput from "./MortgageInput";
 
-//props will be an array of recurring input types
+// props will be an array of recurring input types
 
-//this will hold all of the recurring inputs
+// this will hold all of the recurring inputs
 
-export default class MortgageInputs extends Component {
-    constructor(props) {
+export default class MortgageInputs extends Component<any, any> {
+    constructor(props: {}) {
         super(props);
 
-        //this is required in order to use this correct in the event handler
+        // this is required in order to use this correct in the event handler
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange(obj) {
-        //this will just pass the event through
-        this.props.handleChange(obj)
+    handleChange(obj: {}) {
+        // this will just pass the event through
+        this.props.handleChange(obj);
     }
 
     render() {
@@ -39,7 +40,7 @@ export default class MortgageInputs extends Component {
                             </thead>
                             <tbody>
                                 {
-                                    inputs.map((inputData, index) => (
+                                    inputs.map((inputData: {}, index: {}) => (
                                         <MortgageInput
                                             input={inputData}
                                             key={index} id={index}

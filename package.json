@@ -2,27 +2,24 @@
   "name": "finance-forecaster",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://byronwall.github.io/finance-forecaster",
   "dependencies": {
+    "@types/jest": "^20.0.2",
+    "@types/node": "^8.0.10",
+    "@types/react": "^15.0.37",
+    "@types/react-bootstrap": "0.0.52",
+    "@types/react-dom": "^15.5.1",
     "bootstrap": "^3.3.7",
-    "eslint": "^4.1.1",
-    "gh-pages": "^1.0.0",
-    "lodash": "^4.17.4",
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.0",
     "react-dom": "^15.6.1",
-    "react-scripts": "1.0.10",
+    "react-scripts-ts": "2.3.2",
     "store": "^2.0.12"
   },
+  "devDependencies": {},
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
-  },
-  "devDependencies": {
-    "babel-eslint": "^7.2.3"
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject"
   }
 }
