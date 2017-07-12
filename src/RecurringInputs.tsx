@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { Component } from 'react';
-import { Panel, Button, Glyphicon } from 'react-bootstrap';
+import * as React from "react";
+import { Component } from "react";
+import { Panel, Button, Glyphicon } from "react-bootstrap";
 
-import RecurringInput from './RecurringInput';
+import RecurringInput from "./RecurringInput";
 
 export default class RecurringInputs extends Component<any, any> {
     constructor(props: any) {
@@ -31,7 +31,7 @@ export default class RecurringInputs extends Component<any, any> {
                                     <th>amount</th>
                                     <th>frequency</th>
                                     <th>start/delay (months)</th>
-                                    <th></th>
+                                    <th />
                                 </tr>
                             </thead>
                             <tbody>
@@ -46,7 +46,7 @@ export default class RecurringInputs extends Component<any, any> {
                                     ))
                                 }
                                 <tr>
-                                    <Button onClick={(e) => this.handleChange({ key: 'add' })}>
+                                    <Button onClick={(e) => this.handleChange({ key: "add" })}>
                                         <Glyphicon glyph="plus" />
                                     </Button>
                                 </tr>

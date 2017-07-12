@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { Component } from 'react';
-import { Panel, Table } from 'react-bootstrap';
+import * as React from "react";
+import { Component } from "react";
+import { Panel, Table } from "react-bootstrap";
 
 export default class OutputTable extends Component<any, any> {
   render() {
@@ -55,15 +55,15 @@ export default class OutputTable extends Component<any, any> {
     let newAmounts = amounts;
 
     // the amounts will be year-indexed
-    //recurring amounts is an array of {amount, freq} objects
+    // recurring amounts is an array of {amount, freq} objects
     let recurringRunningTotal = 0;
 
     let totalIndex = 0;
     for (var year = 0; year < newAmounts.length; year++) {
       for (var month = 0; month < 12; month++) {
 
-        for (var el_index = 0; el_index < recurringAmounts.length; el_index++) {
-          let element = recurringAmounts[el_index];
+        for (var elIndex = 0; elIndex < recurringAmounts.length; elIndex++) {
+          let element = recurringAmounts[elIndex];
           // if the freq is zero then add the amount
           if (totalIndex % element.frequency === 0 &&
             totalIndex >= element.delay

@@ -39,14 +39,14 @@ export default class MortgageInputs extends Component<any, any> {
                                 </tr>
                             </thead>
                             <tbody>
-                                {
-                                    inputs.map((inputData: {}, index: {}) => (
-                                        <MortgageInput
-                                            input={inputData}
-                                            key={index} id={index}
-                                            handleChange={this.handleChange} />
-                                    ))
-                                }
+                                {inputs.map((inputData: {}, index: {}) => (
+                                    <MortgageInput
+                                        input={inputData}
+                                        key={index}
+                                        id={index}
+                                        handleChange={this.handleChange}
+                                    />
+                                ))}
                             </tbody>
                         </table>
                     </form>

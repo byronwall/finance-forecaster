@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import { Component } from "react";
 import { FormGroup, FormControl } from "react-bootstrap";
 
@@ -6,15 +6,15 @@ export default class MortgageInput extends Component<any, any> {
 
     handleChange(e: any, key: any) {
 
-        let amount = Number.parseFloat(e.target.value)
+        let amount = Number.parseFloat(e.target.value);
         amount = Number.isNaN(amount) ? 0 : amount;
 
-        //this is using wacky ES6 syntax to simplify the object creation
+        // this is using wacky ES6 syntax to simplify the object creation
         this.props.handleChange({
             id: this.props.id,
             [key]: amount,
             key
-        })
+        });
     }
 
     render() {
@@ -29,7 +29,7 @@ export default class MortgageInput extends Component<any, any> {
                             type="text"
                             value={input.amount}
                             placeholder="Starting amount"
-                            onChange={(e) => { this.handleChange(e, "amount") }}
+                            onChange={(e) => { this.handleChange(e, "amount"); }}
                         />
                     </FormGroup>
                 </td>
@@ -39,7 +39,7 @@ export default class MortgageInput extends Component<any, any> {
                             type="text"
                             value={input.rate}
                             placeholder="Rate"
-                            onChange={(e) => { this.handleChange(e, "rate") }}
+                            onChange={(e) => { this.handleChange(e, "rate"); }}
                         />
                     </FormGroup>
                 </td>
@@ -49,7 +49,7 @@ export default class MortgageInput extends Component<any, any> {
                             type="text"
                             value={input.term}
                             placeholder="Term"
-                            onChange={(e) => { this.handleChange(e, "term") }}
+                            onChange={(e) => { this.handleChange(e, "term"); }}
                         />
                     </FormGroup>
                 </td>
@@ -60,7 +60,7 @@ export default class MortgageInput extends Component<any, any> {
                             type="text"
                             value={input.delay}
                             placeholder="Term"
-                            onChange={(e) => { this.handleChange(e, "delay") }}
+                            onChange={(e) => { this.handleChange(e, "delay"); }}
                         />
                     </FormGroup>
                 </td>

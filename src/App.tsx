@@ -61,25 +61,25 @@ class App extends Component<any, any> {
     this.setState({ loans: newState });
   }
 
-  handleRecurringChange(obj:any) {
+  handleRecurringChange(obj: any) {
     console.log("recurring", obj);
 
     console.log("current state", this.state.recurringAmounts);
     let newState = this.state.recurringAmounts;
 
     if (obj.key === "add") {
-      const id = newState.reduce((acc:any, cur:any) => Math.max(acc, cur.id), 0) + 1;
+      const id = newState.reduce((acc: any, cur: any) => Math.max(acc, cur.id), 0) + 1;
       console.log("new id", id);
       newState.push({ amount: 0, frequency: 1, delay: 0, id });
 
     } else if (obj.key === "remove") {
       // this will remove the given item
-      newState = newState.filter((el:any) => {
+      newState = newState.filter((el: any) => {
         return el.id !== obj.id;
       });
     } else {
 
-      newState = newState.map((el:any) => {
+      newState = newState.map((el: any) => {
         return (el.id === obj.id) ? { ...el, ...{ [obj.key]: obj[obj.key] } } : el;
       });
 
@@ -89,7 +89,7 @@ class App extends Component<any, any> {
     this.setState({ recurringAmounts: newState });
   }
 
-  handleStoreChange(obj:any) {
+  handleStoreChange(obj: any) {
     console.log("handleStoreChange", obj);
 
     console.log("current state", this.state.recurringAmounts);
@@ -99,7 +99,7 @@ class App extends Component<any, any> {
 
       let savedObj = this.state.savedObj;
 
-      savedObj = savedObj.filter((el:any) => {
+      savedObj = savedObj.filter((el: any) => {
         return el.name !== obj.id;
       });
 
@@ -124,12 +124,12 @@ class App extends Component<any, any> {
 
       store.set("savedState", savedObj);
 
-      this.setState({ savedObj: savedObj })
+      this.setState({ savedObj: savedObj });
       // put that object into a store
     } else if (obj.key === "load") {
       // iterate through the saved ones for the id
       console.log("loading the saved state");
-      let matches = this.state.savedObj.filter((item:any) => item.name === obj.id);
+      let matches = this.state.savedObj.filter((item: any) => item.name === obj.id);
 
       console.log(matches);
       console.log({ ...matches[0].data });

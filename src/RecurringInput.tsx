@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import { Component } from "react";
 import { FormGroup, Glyphicon, FormControl } from "react-bootstrap";
 
@@ -7,14 +7,14 @@ export default class RecurringInput extends Component<any, any> {
     handleChange(e: any, key: string) {
         console.log("recurring input", e, key);
 
-        let amount = Number.parseFloat(e.target.value)
+        let amount = Number.parseFloat(e.target.value);
         amount = Number.isNaN(amount) ? 0 : amount;
 
         this.props.handleChange({
             id: this.props.id,
             [key]: amount,
             key
-        })
+        });
     }
 
     render() {
@@ -28,7 +28,7 @@ export default class RecurringInput extends Component<any, any> {
                             type="text"
                             value={inputData.amount}
                             placeholder="Starting amount"
-                            onChange={(e) => { this.handleChange(e, "amount") }}
+                            onChange={(e) => this.handleChange(e, "amount")}
                         />
                     </FormGroup>
                 </td>
@@ -39,7 +39,7 @@ export default class RecurringInput extends Component<any, any> {
                             type="text"
                             value={inputData.frequency}
                             placeholder="Rate"
-                            onChange={(e) => { this.handleChange(e, "frequency") }}
+                            onChange={(e) => this.handleChange(e, "frequency")}
                         />
                     </FormGroup>
                 </td>
@@ -49,7 +49,7 @@ export default class RecurringInput extends Component<any, any> {
                             type="text"
                             value={inputData.delay}
                             placeholder="Delay"
-                            onChange={(e) => { this.handleChange(e, "delay") }}
+                            onChange={(e) => this.handleChange(e, "delay")}
                         />
                     </FormGroup>
                 </td>

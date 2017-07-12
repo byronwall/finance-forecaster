@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { Component } from 'react';
-import { Panel, ListGroup, Button } from 'react-bootstrap';
+import * as React from "react";
+import { Component } from "react";
+import { Panel, ListGroup, Button } from "react-bootstrap";
 
-import SavedStore from './SavedStore';
+import SavedStore from "./SavedStore";
 
 export default class SavedStores extends Component<any, any> {
     constructor(props: any) {
@@ -31,11 +31,12 @@ export default class SavedStores extends Component<any, any> {
                                     input={input}
                                     handleChange={this.handleChange}
                                     key={input.name}
-                                    id={input.name} />
+                                    id={input.name}
+                                />
                             ))
                         }
                     </ListGroup>
-                    <Button onClick={(e) => { this.handleChange({ key: 'save' }); }}>
+                    <Button onClick={(e) => { this.handleChange({ key: "save" }); }}>
                         <p>save current</p>
                     </Button>
                 </Panel>
