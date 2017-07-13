@@ -1,21 +1,25 @@
 import * as React from "react";
 import { Component } from "react";
 
-import OutputTable from "./OutputTable";
+
 import Chart from "./Chart";
-import RecurringInputs from "./RecurringInputs";
-import MortgageInputs from "./MortgageInputs";
 import SavedStores from "./SavedStores";
 
 import * as store from "store";
 
 import { Grid, Row, Col, Navbar } from "react-bootstrap";
+import { CashAccount } from "../Models/Account";
+import OutputTableContainer from "./OutputTableContainer";
 
 class App extends Component<any, any> {
   constructor(props: any) {
     super(props);
 
     this.state = {
+      accounts: [
+        new CashAccount(0, 100),
+        new CashAccount(0, 200)
+      ],
       loans: [
         { rate: 3.87, amount: 200000, term: 30, delay: 0, id: 1 }
       ],
@@ -163,15 +167,9 @@ class App extends Component<any, any> {
             </Col>
           </Row>
           <Row>
-            <Col md={5}>
-              <MortgageInputs handleChange={this.handleMortgageChange} inputs={this.state.loans} />
-              <RecurringInputs inputs={this.state.recurringAmounts} handleChange={this.handleRecurringChange} />
-            </Col>
-            <Col md={7}>
-              <OutputTable
-                moneyObj={this.state.income}
-                mortgageObj={this.state.loans}
-                recurringAmounts={this.state.recurringAmounts}
+            <Col md={12}>
+              <OutputTableContainer
+                accounts={this.state.accounts}
               />
             </Col>
           </Row>
