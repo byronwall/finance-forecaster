@@ -20,77 +20,33 @@ class App extends Component<any, any> {
         new CashAccount(0, 100),
         new CashAccount(0, 200)
       ],
-      loans: [
-        { rate: 3.87, amount: 200000, term: 30, delay: 0, id: 1 }
-      ],
-      recurringAmounts: [
-        { amount: 2000, frequency: 1, delay: 0, id: 1 },
-        { amount: -800, frequency: 1, delay: 0, id: 2 }
-      ],
       savedObj: this.getSavedObj()
     };
 
-    // this is required i order to use this correct in the event handler
-    this.handleMortgageChange = this.handleMortgageChange.bind(this);
-    this.handleRecurringChange = this.handleRecurringChange.bind(this);
     this.handleStoreChange = this.handleStoreChange.bind(this);
+    this.handleAccountChange = this.handleAccountChange.bind(this);
   }
 
   getSavedObj() {
     return store.get("savedState") || [];
   }
 
-  handleMortgageChange(obj: any) {
-    console.log(obj);
+  handleAccountChange(obj: any, objIndex: number) {
+    // this will be an account coming in
 
-    console.log("current state", this.state.loans);
-    let newState = this.state.loans;
+    console.log("account change", obj, objIndex);
 
-    if (obj.key === "add") {
-      // this will add a new item
-      const id = newState.reduce((acc: any, cur: any) => Math.max(acc, cur.id), 0);
+    let newAccounts: any[] = [];
 
-      newState.push({ amount: 0, frequency: 1, delay: 0, id });
+    this.state.accounts.forEach((account: any, index: number) => {
+      if (objIndex === index) {
+        newAccounts.push(obj);
+      } else {
+        newAccounts.push(account);
+      }
+    });
 
-    } else if (obj.key === "remove") {
-      // this will remove the given item
-      newState = newState.filter((el: any) => {
-        return el.id !== obj.id;
-      });
-    } else {
-      newState[obj.id][obj.key] = obj[obj.key];
-      console.log("new state", newState);
-    }
-
-    this.setState({ loans: newState });
-  }
-
-  handleRecurringChange(obj: any) {
-    console.log("recurring", obj);
-
-    console.log("current state", this.state.recurringAmounts);
-    let newState = this.state.recurringAmounts;
-
-    if (obj.key === "add") {
-      const id = newState.reduce((acc: any, cur: any) => Math.max(acc, cur.id), 0) + 1;
-      console.log("new id", id);
-      newState.push({ amount: 0, frequency: 1, delay: 0, id });
-
-    } else if (obj.key === "remove") {
-      // this will remove the given item
-      newState = newState.filter((el: any) => {
-        return el.id !== obj.id;
-      });
-    } else {
-
-      newState = newState.map((el: any) => {
-        return (el.id === obj.id) ? { ...el, ...{ [obj.key]: obj[obj.key] } } : el;
-      });
-
-      console.log("new state", newState);
-    }
-
-    this.setState({ recurringAmounts: newState });
+    this.setState({ accounts: newAccounts });
   }
 
   handleStoreChange(obj: any) {
@@ -170,6 +126,7 @@ class App extends Component<any, any> {
             <Col md={12}>
               <OutputTableContainer
                 accounts={this.state.accounts}
+                handleAccountChange={this.handleAccountChange}
               />
             </Col>
           </Row>

@@ -5,7 +5,6 @@ export interface Account {
 }
 
 export class LoanAccount implements Account {
-
     type = "loan";
     name = "testing";
 
@@ -15,7 +14,6 @@ export class LoanAccount implements Account {
 }
 
 export class CashAccount implements Account {
-
     startAmount: number;
     totalIncome: number;
 
@@ -36,6 +34,8 @@ export class CashAccount implements Account {
         for (let i = 0; i < months; i++) {
             let curBalance = prevBalance + this.totalIncome;
             cashFlowsOut.push(new CashCashFlow(curBalance, this.totalIncome, i));
+
+            prevBalance = curBalance;
         }
 
         return cashFlowsOut;
