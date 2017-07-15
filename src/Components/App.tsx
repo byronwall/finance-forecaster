@@ -10,9 +10,17 @@ import { Grid, Row, Col, PageHeader } from "react-bootstrap";
 import { CashAccount, LoanAccount, Account } from "../Models/Account";
 import OutputTableContainer from "./OutputTableContainer";
 
-interface AppState {
-  accounts: Account[];
-  savedObj: any;
+class StateObj {
+  accounts: Account[] = [];
+}
+
+class SavedState {
+  name: string;
+  data: StateObj;
+}
+
+class AppState extends StateObj {
+  savedObj: SavedState[];
 }
 
 export class App extends Component<{}, AppState> {
@@ -80,10 +88,12 @@ export class App extends Component<{}, AppState> {
       console.log("saving the state");
 
       // take the current state (excluding the saved state obj)
-      let savedState = { ...this.state };
-      delete savedState.savedObj;
+      let savedState = new StateObj();
+      for (let key of Object.keys(savedState)) {
+        savedState[key] = this.state[key];
+      }
 
-      let saveName = window.prompt("Enter a name for saving");
+      let saveName = window.prompt("Enter a name for saving") as string;
 
       // put into a new object
 
