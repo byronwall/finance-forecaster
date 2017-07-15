@@ -2,9 +2,10 @@ import * as React from "react";
 import { Component } from "react";
 import { Table, FormControl } from "react-bootstrap";
 
-import { CashAccount,  Transfer } from "../Models/Account";
+import { CashAccount, Transfer } from "../Models/Account";
 
 import { TransferGroup } from "./TransferGroup";
+import { handleInput } from "../Helpers/Functions";
 
 interface CashOutputTableProps {
   account: CashAccount;
@@ -15,11 +16,6 @@ interface CashOutputTableProps {
 export class CashOutputTable extends Component<CashOutputTableProps, any> {
   handleAccountChange(data: any) {
     for (let key of Object.keys(data)) {
-      // TODO: really need to get rid of this
-      if (key === "startAmount" || key === "totalIncome") {
-        data[key] = Number.parseFloat(data[key]);
-      }
-
       this.props.account[key] = data[key];
     }
 
@@ -41,7 +37,7 @@ export class CashOutputTable extends Component<CashOutputTableProps, any> {
   render() {
     let amounts = this.props.account.getCashFlows(24);
 
-    console.log("amounts", amounts);
+    let inputColumns = ["name", "startAmount"];
 
     return (
       <div>
@@ -52,31 +48,29 @@ export class CashOutputTable extends Component<CashOutputTableProps, any> {
           <Table>
             <thead>
               <tr>
-                <th>name</th>
-                <th>start amount</th>
+                {inputColumns.map((column, index) =>
+                  <th key={index}>
+                    {column}
+                  </th>
+                )}
               </tr>
             </thead>
 
             <tbody>
               <tr>
-                <td>
-                  <FormControl
-                    type="text"
-                    placeholder="name"
-                    value={this.props.account.name}
-                    onChange={(e: any) =>
-                      this.handleAccountChange({ name: e.target.value })}
-                  />
-                </td>
-                <td>
-                  <FormControl
-                    type="text"
-                    placeholder="start amount"
-                    value={this.props.account.startAmount}
-                    onChange={(e: any) =>
-                      this.handleAccountChange({ startAmount: e.target.value })}
-                  />
-                </td>
+                {inputColumns.map((column, index) =>
+                  <td key={index}>
+                    <FormControl
+                      type="text"
+                      placeholder={column}
+                      value={this.props.account[column]}
+                      onChange={(e: any) =>
+                        this.handleAccountChange({
+                          [column]: handleInput(e.target.value)
+                        })}
+                    />
+                  </td>
+                )}
               </tr>
             </tbody>
           </Table>

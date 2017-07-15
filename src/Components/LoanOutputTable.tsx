@@ -16,15 +16,8 @@ interface LoanOutputTableProps {
 export class LoanOutputTable extends Component<LoanOutputTableProps, any> {
   handleAccountChange(data: any) {
     for (let key of Object.keys(data)) {
-      // TODO: really need to get rid of this
-      if (key === "startAmount" || key === "totalIncome") {
-        data[key] = Number.parseFloat(data[key]);
-      }
-
       this.props.account[key] = data[key];
     }
-
-    console.log(this.props.account);
 
     this.props.handleAccountChange(this.props.account, this.props.index);
   }
