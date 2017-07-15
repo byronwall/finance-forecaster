@@ -6,6 +6,7 @@ import OutputTableHeader from "./OutputTableHeader";
 import { Account, CashAccount, LoanAccount } from "../Models/Account";
 import { CashOutputTable } from "./CashOutputTable";
 import { LoanOutputTable } from "./LoanOutputTable";
+import { CombinedOutputTable } from "./CombinedOutputTable";
 
 interface OutputTableContainerProps {
   accounts: Account[];
@@ -37,6 +38,10 @@ export default class OutputTableContainer extends Component<
   }
 
   getAccountTable(account: Account) {
+    if (this.state.activeAccount === -1) {
+      return <CombinedOutputTable accounts={this.props.accounts} />;
+    }
+
     switch (account.type) {
       case "cash":
         return (

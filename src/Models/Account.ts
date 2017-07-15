@@ -1,6 +1,8 @@
 export interface Account {
   type: string;
   name: string;
+
+  getCashFlows: (months: number) => CashFlow[];
 }
 
 export class LoanAccount implements Account {
@@ -95,13 +97,18 @@ export class CashAccount implements Account {
   }
 }
 
-export class CashCashFlow {
+export interface CashFlow {
+  balance: number;
+  month: number;
+}
+
+export class CashCashFlow implements CashFlow {
   balance: number;
   net: number;
   month: number;
 }
 
-export class LoanCashFlow {
+export class LoanCashFlow implements CashFlow {
   balance: number;
   payments: number;
   month: number;
