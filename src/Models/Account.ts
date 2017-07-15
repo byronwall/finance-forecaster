@@ -1,68 +1,118 @@
 export interface Account {
-    getCashFlows: (months: number, transfer: Transfer[]) => CashFlow[];
-    type: string;
-    name: string;
+  type: string;
+  name: string;
 }
 
 export class LoanAccount implements Account {
-    type = "loan";
-    name = "testing";
+  type = "loan";
+  name = "testing";
 
-    getCashFlows(months: number, transfer: Transfer[] = []) {
-        return [];
+  term: number;
+  annualRate: number;
+  startingBalance: number;
+
+  transfers: Transfer[] = [];
+
+  getCashFlows(months: number) {
+    let cashFlowsOut = [];
+    let prevBalance = this.startingBalance;
+
+    let monthRate = this.annualRate / 100 / 12;
+
+    for (let month = 0; month < months; month++) {
+      let monthPayments = 0;
+      // check the transfer to see if somethign affects it
+
+      this.transfers.forEach(transfer => {
+        if (
+          (transfer.start <= month &&
+            (month - transfer.start) % transfer.frequency === 0) ||
+          (transfer.frequency === 0 && transfer.start === month)
+        ) {
+          monthPayments += transfer.amount;
+        }
+      });
+
+      let curBalance = prevBalance + monthPayments;
+      let interest = monthRate * curBalance;
+
+      curBalance += interest;
+
+      let cashFlow = new LoanCashFlow();
+      cashFlow.balance = curBalance;
+      cashFlow.month = month;
+      cashFlow.payments = monthPayments;
+      cashFlow.interest = interest;
+
+      cashFlowsOut.push(cashFlow);
+
+      prevBalance = curBalance;
     }
+
+    return cashFlowsOut;
+  }
 }
 
 export class CashAccount implements Account {
-    startAmount: number;
-    totalIncome: number;
+  startAmount: number;
 
-    type = "cash";
-    name = "testing";
+  type = "cash";
+  name = "testing";
 
-    constructor(start: number, totalIncome: number) {
-        this.startAmount = start;
-        this.totalIncome = totalIncome;
-    }
+  transfers: Transfer[] = [];
 
-    getCashFlows(months: number, transfer: Transfer[]) {
+  getCashFlows(months: number) {
+    let cashFlowsOut = [];
+    let prevBalance = this.startAmount;
 
-        let cashFlowsOut = [];
+    for (let month = 0; month < months; month++) {
+      let monthIncome = 0;
+      // check the transfer to see if somethign affects it
 
-        let prevBalance = this.startAmount;
-
-        for (let i = 0; i < months; i++) {
-            let curBalance = prevBalance + this.totalIncome;
-            cashFlowsOut.push(new CashCashFlow(curBalance, this.totalIncome, i));
-
-            prevBalance = curBalance;
+      this.transfers.forEach(transfer => {
+        if (
+          (transfer.start <= month &&
+            (month - transfer.start) % transfer.frequency === 0) ||
+          (transfer.frequency === 0 && transfer.start === month)
+        ) {
+          monthIncome += transfer.amount;
         }
+      });
 
-        return cashFlowsOut;
+      let curBalance = prevBalance + monthIncome;
+
+      let cashFlow = new CashCashFlow();
+      cashFlow.balance = curBalance;
+      cashFlow.month = month;
+      cashFlow.net = monthIncome;
+
+      cashFlowsOut.push(cashFlow);
+
+      prevBalance = curBalance;
     }
 
+    return cashFlowsOut;
+  }
 }
 
-export interface CashFlow {
-    balance: number;
-    month: number;
+export class CashCashFlow {
+  balance: number;
+  net: number;
+  month: number;
 }
 
-export class CashCashFlow implements CashFlow {
-    balance: number;
-    net: number;
-    month: number;
-
-    constructor(balance: number, net: number, month: number) {
-        this.balance = balance;
-        this.net = net;
-        this.month = month;
-    }
-
+export class LoanCashFlow {
+  balance: number;
+  payments: number;
+  month: number;
+  interest: number;
 }
 
-export interface Transfer {
-    fromAccount: number;
-    toAccount: number;
-    amount: number;
+export class Transfer {
+  fromAccount: number;
+  toAccount: number;
+  amount: number;
+  frequency: number;
+  start: number;
+  end: number;
 }

@@ -1,25 +1,31 @@
 import * as React from "react";
 import { Component } from "react";
 
-
-import Chart from "./Chart";
+import {} from "./Chart";
 import SavedStores from "./SavedStores";
 
 import * as store from "store";
 
-import { Grid, Row, Col, Navbar } from "react-bootstrap";
-import { CashAccount } from "../Models/Account";
+import { Grid, Row, Col, PageHeader } from "react-bootstrap";
+import { CashAccount, LoanAccount } from "../Models/Account";
 import OutputTableContainer from "./OutputTableContainer";
 
 class App extends Component<any, any> {
   constructor(props: any) {
     super(props);
 
+    let cashAcct = new CashAccount();
+    cashAcct.name = "cash";
+    cashAcct.startAmount = 500;
+
+    let loanAcct = new LoanAccount();
+    loanAcct.name = "loan";
+    loanAcct.startingBalance = -300000;
+    loanAcct.term = 30 * 12;
+    loanAcct.annualRate = 3.87;
+
     this.state = {
-      accounts: [
-        new CashAccount(0, 100),
-        new CashAccount(0, 200)
-      ],
+      accounts: [cashAcct, loanAcct],
       savedObj: this.getSavedObj()
     };
 
@@ -67,7 +73,6 @@ class App extends Component<any, any> {
 
       this.setState({ savedObj });
       store.set("savedState", savedObj);
-
     } else if (obj.key === "save") {
       console.log("saving the state");
 
@@ -89,7 +94,9 @@ class App extends Component<any, any> {
     } else if (obj.key === "load") {
       // iterate through the saved ones for the id
       console.log("loading the saved state");
-      let matches = this.state.savedObj.filter((item: any) => item.name === obj.id);
+      let matches = this.state.savedObj.filter(
+        (item: any) => item.name === obj.id
+      );
 
       console.log(matches);
       console.log({ ...matches[0].data });
@@ -103,18 +110,11 @@ class App extends Component<any, any> {
   render() {
     return (
       <div>
-        <Navbar>
-          <Grid>
-            <Navbar.Header>
-              <Navbar.Brand>
-                <p>Finance Forecaster</p>
-              </Navbar.Brand>
-              <Navbar.Toggle />
-            </Navbar.Header>
-          </Grid>
-        </Navbar>
         <Grid>
-          <Row >
+          <Row>
+            <PageHeader>Finance Forecaster</PageHeader>
+          </Row>
+          <Row>
             <Col md={12}>
               <SavedStores
                 inputs={this.state.savedObj}
@@ -130,8 +130,6 @@ class App extends Component<any, any> {
               />
             </Col>
           </Row>
-          <Chart />
-          <Row />
         </Grid>
       </div>
     );
