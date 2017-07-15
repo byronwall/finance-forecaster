@@ -18,7 +18,7 @@ export class TransferGroup extends Component<
   TransferGroupProps,
   TransferGroupState
 > {
-  constructor(props: any) {
+  constructor(props: TransferGroupProps) {
     super(props);
 
     this.state = {

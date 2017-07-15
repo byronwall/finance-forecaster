@@ -12,8 +12,7 @@ interface OutputTableHeaderProps {
 }
 
 export default class OutputTableHeader extends Component<
-  OutputTableHeaderProps,
-  any
+  OutputTableHeaderProps
 > {
   render() {
     return (

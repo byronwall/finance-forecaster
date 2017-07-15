@@ -13,7 +13,7 @@ interface LoanOutputTableProps {
   handleAccountChange: (obj: any, index: number) => void;
 }
 
-export class LoanOutputTable extends Component<LoanOutputTableProps, any> {
+export class LoanOutputTable extends Component<LoanOutputTableProps> {
   handleAccountChange(data: any) {
     for (let key of Object.keys(data)) {
       this.props.account[key] = data[key];

@@ -13,7 +13,7 @@ interface CashOutputTableProps {
   handleAccountChange: (obj: any, index: number) => void;
 }
 
-export class CashOutputTable extends Component<CashOutputTableProps, any> {
+export class CashOutputTable extends Component<CashOutputTableProps> {
   handleAccountChange(data: any) {
     for (let key of Object.keys(data)) {
       this.props.account[key] = data[key];

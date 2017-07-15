@@ -7,10 +7,15 @@ import SavedStores from "./SavedStores";
 import * as store from "store";
 
 import { Grid, Row, Col, PageHeader } from "react-bootstrap";
-import { CashAccount, LoanAccount } from "../Models/Account";
+import { CashAccount, LoanAccount, Account } from "../Models/Account";
 import OutputTableContainer from "./OutputTableContainer";
 
-class App extends Component<any, any> {
+interface AppState {
+  accounts: Account[];
+  savedObj: any;
+}
+
+export class App extends Component<{}, AppState> {
   constructor(props: any) {
     super(props);
 
@@ -57,8 +62,6 @@ class App extends Component<any, any> {
 
   handleStoreChange(obj: any) {
     console.log("handleStoreChange", obj);
-
-    console.log("current state", this.state.recurringAmounts);
 
     if (obj.key === "remove") {
       // this will remove the given item
@@ -135,5 +138,3 @@ class App extends Component<any, any> {
     );
   }
 }
-
-export default App;

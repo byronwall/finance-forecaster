@@ -11,13 +11,11 @@ interface CombinedOutputTableProps {
   accounts: Account[];
 }
 
-export class CombinedOutputTable extends Component<
-  CombinedOutputTableProps,
-  any
-> {
+export class CombinedOutputTable extends Component<CombinedOutputTableProps> {
   render() {
     // iterate all accounts, get the cash flows, combine the cash flows
 
+    // TODO: take this code and put it somewhere common so it can be used elsewhere (for charting)
     let cashFlows: CashFlow[][] = [];
 
     this.props.accounts.forEach(account => {
@@ -39,9 +37,7 @@ export class CombinedOutputTable extends Component<
 
     return (
       <div>
-        <h2>account details</h2>
-
-        <h3>output table</h3>
+        <h3>combined table</h3>
         <Table striped={true} bordered={true} hover={true}>
           <thead>
             <tr>
