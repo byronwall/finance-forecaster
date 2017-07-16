@@ -12,6 +12,7 @@ export class LoanAccount implements Account {
   term: number;
   annualRate: number;
   startingBalance: number;
+  start: number;
 
   transfers: Transfer[] = [];
 
@@ -23,22 +24,27 @@ export class LoanAccount implements Account {
 
     for (let month = 0; month < months; month++) {
       let monthPayments = 0;
-      // check the transfer to see if somethign affects it
+      let curBalance = 0;
+      let interest = 0;
 
-      this.transfers.forEach(transfer => {
-        if (
-          (transfer.start <= month &&
-            (month - transfer.start) % transfer.frequency === 0) ||
-          (transfer.frequency === 0 && transfer.start === month)
-        ) {
-          monthPayments += transfer.amount;
-        }
-      });
+      if (this.start <= month) {
+        this.transfers.forEach(transfer => {
+          if (
+            (transfer.start <= month &&
+              (month - transfer.start) % transfer.frequency === 0) ||
+            (transfer.frequency === 0 && transfer.start === month)
+          ) {
+            monthPayments += transfer.amount;
+          }
+        });
 
-      let curBalance = prevBalance + monthPayments;
-      let interest = monthRate * curBalance;
+        curBalance = prevBalance + monthPayments;
+        interest = monthRate * curBalance;
 
-      curBalance += interest;
+        curBalance += interest;
+
+        prevBalance = curBalance;
+      }
 
       let cashFlow = new LoanCashFlow();
       cashFlow.balance = curBalance;
@@ -47,8 +53,6 @@ export class LoanAccount implements Account {
       cashFlow.interest = interest;
 
       cashFlowsOut.push(cashFlow);
-
-      prevBalance = curBalance;
     }
 
     return cashFlowsOut;

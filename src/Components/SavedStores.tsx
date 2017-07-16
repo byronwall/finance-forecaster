@@ -38,7 +38,7 @@ export default class SavedStores extends Component<any, any> {
               this.handleChange({ key: "save" });
             }}
           >
-            <p>save current</p>
+            {"save current"}
           </Button>
         </Panel>
       </div>

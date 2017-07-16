@@ -1,14 +1,15 @@
 import * as React from "react";
 import { Component } from "react";
 
-import * as Bootstrap from "react-bootstrap";
-
 import { Account } from "../Models/Account";
+import { ListGroup, ListGroupItem, Button, Glyphicon } from "react-bootstrap";
 
 interface OutputTableHeaderProps {
   accounts: Account[];
   activeAccount: number;
   handleChange: (newAcive: number) => void;
+  handleNewAccount: (type: string) => void;
+  handleRemoveAccount: (index: number) => void;
 }
 
 export default class OutputTableHeader extends Component<
@@ -18,26 +19,45 @@ export default class OutputTableHeader extends Component<
     return (
       <div>
         <h2>accounts</h2>
+        <div>
+          <Button onClick={() => this.props.handleNewAccount("cash")}>
+            {"add cash acct"}
+          </Button>
+          <Button onClick={() => this.props.handleNewAccount("loan")}>
+            {"add loan acct"}
+          </Button>
+        </div>
 
-        <Bootstrap.ListGroup>
+        <ListGroup>
           {this.props.accounts.map((account, index) =>
-            <Bootstrap.ListGroupItem
+            <ListGroupItem
               key={index}
               active={index === this.props.activeAccount}
               onClick={() => this.props.handleChange(index)}
             >
               {account.name}
-            </Bootstrap.ListGroupItem>
+
+              <Button
+                onClick={e => {
+                  this.props.handleRemoveAccount(index);
+                  e.stopPropagation();
+                }}
+                bsSize="sm"
+                className="pull-right"
+              >
+                <Glyphicon glyph="remove" />
+              </Button>
+            </ListGroupItem>
           )}
 
-          <Bootstrap.ListGroupItem
+          <ListGroupItem
             key={-1}
             active={-1 === this.props.activeAccount}
             onClick={() => this.props.handleChange(-1)}
           >
             {"combined output"}
-          </Bootstrap.ListGroupItem>
-        </Bootstrap.ListGroup>
+          </ListGroupItem>
+        </ListGroup>
       </div>
     );
   }

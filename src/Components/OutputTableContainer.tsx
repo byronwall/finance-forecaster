@@ -10,7 +10,11 @@ import { CombinedOutputTable } from "./CombinedOutputTable";
 
 interface OutputTableContainerProps {
   accounts: Account[];
-  handleAccountChange: (obj: any, index: number) => void;
+  handleAccountChange: (
+    obj: any,
+    index: number,
+    shouldRemove?: boolean
+  ) => void;
 }
 
 interface OutputTableContainerState {
@@ -35,6 +39,35 @@ export default class OutputTableContainer extends Component<
     this.setState({
       activeAccount: newActive
     });
+  }
+
+  handleNewAccount(acctType: string) {
+    // add the account
+
+    let newAccount;
+    if (acctType === "cash") {
+      newAccount = new CashAccount();
+    } else if (acctType === "loan") {
+      newAccount = new LoanAccount();
+    }
+
+    const currentLength = this.props.accounts.length;
+
+    this.props.handleAccountChange(newAccount, -1);
+
+    this.setState({ activeAccount: currentLength });
+
+    // make it active
+  }
+
+  handleRemoveAccount(index: number) {
+    if (
+      this.state.activeAccount === index ||
+      this.state.activeAccount === this.props.accounts.length - 1
+    ) {
+      this.setState({ activeAccount: 0 });
+    }
+    this.props.handleAccountChange(null, index, true);
   }
 
   getAccountTable(account: Account) {
@@ -79,6 +112,9 @@ export default class OutputTableContainer extends Component<
               accounts={this.props.accounts}
               activeAccount={this.state.activeAccount}
               handleChange={this.handleChange}
+              handleNewAccount={(type: string) => this.handleNewAccount(type)}
+              handleRemoveAccount={(index: number) =>
+                this.handleRemoveAccount(index)}
             />
           </Col>
           <Col md={9}>

@@ -37,7 +37,20 @@ export class LoanOutputTable extends Component<LoanOutputTableProps> {
 
     console.log("amounts", amounts);
 
-    let inputColumns = ["name", "startingBalance", "term", "annualRate"];
+    let inputColumns = [
+      "name",
+      "startingBalance",
+      "term",
+      "annualRate",
+      "start"
+    ];
+    let funcs = [
+      (input: string) => input,
+      handleInput,
+      handleInput,
+      handleInput,
+      handleInput
+    ];
 
     return (
       <div>
@@ -66,7 +79,7 @@ export class LoanOutputTable extends Component<LoanOutputTableProps> {
                       value={this.props.account[column]}
                       onChange={(e: any) =>
                         this.handleAccountChange({
-                          [column]: handleInput(e.target.value)
+                          [column]: funcs[index](e.target.value)
                         })}
                     />
                   </td>

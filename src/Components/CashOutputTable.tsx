@@ -5,7 +5,7 @@ import { Table, FormControl } from "react-bootstrap";
 import { CashAccount, Transfer } from "../Models/Account";
 
 import { TransferGroup } from "./TransferGroup";
-import { handleInput } from "../Helpers/Functions";
+import { handleInput, $N } from "../Helpers/Functions";
 
 interface CashOutputTableProps {
   account: CashAccount;
@@ -38,6 +38,12 @@ export class CashOutputTable extends Component<CashOutputTableProps> {
     let amounts = this.props.account.getCashFlows(24);
 
     let inputColumns = ["name", "startAmount"];
+    let funcs = [
+      (input: string) => {
+        return input;
+      },
+      handleInput
+    ];
 
     return (
       <div>
@@ -63,10 +69,10 @@ export class CashOutputTable extends Component<CashOutputTableProps> {
                     <FormControl
                       type="text"
                       placeholder={column}
-                      value={this.props.account[column]}
+                      value={$N(this.props.account[column], "")}
                       onChange={(e: any) =>
                         this.handleAccountChange({
-                          [column]: handleInput(e.target.value)
+                          [column]: funcs[index](e.target.value)
                         })}
                     />
                   </td>

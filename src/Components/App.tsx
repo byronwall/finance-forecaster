@@ -10,13 +10,38 @@ import { Grid, Row, Col, PageHeader } from "react-bootstrap";
 import { CashAccount, LoanAccount, Account } from "../Models/Account";
 import OutputTableContainer from "./OutputTableContainer";
 
+import * as CryptoJS from "crypto-js";
+
 class StateObj {
   accounts: Account[] = [];
+
+  static FromJson(data: StateObj): StateObj {
+    let stateObj = new StateObj();
+
+    // handle accounts
+    data.accounts.forEach(account => {
+      if (account.type === "cash") {
+        let newAccount = new CashAccount();
+        Object.assign(newAccount, account);
+
+        stateObj.accounts.push(newAccount);
+      } else if (account.type === "loan") {
+        let newAccount = new LoanAccount();
+        Object.assign(newAccount, account);
+
+        stateObj.accounts.push(newAccount);
+      }
+    });
+
+    return stateObj;
+  }
 }
 
 class SavedState {
   name: string;
   data: StateObj;
+  encryptedData: CryptoJS.WordArray | string;
+  encrytedCheck: CryptoJS.WordArray | string;
 }
 
 class AppState extends StateObj {
@@ -24,7 +49,7 @@ class AppState extends StateObj {
 }
 
 export class App extends Component<{}, AppState> {
-  constructor(props: any) {
+  constructor(props: {}) {
     super(props);
 
     let cashAcct = new CashAccount();
@@ -36,6 +61,7 @@ export class App extends Component<{}, AppState> {
     loanAcct.startingBalance = -300000;
     loanAcct.term = 30 * 12;
     loanAcct.annualRate = 3.87;
+    loanAcct.start = 0;
 
     this.state = {
       accounts: [cashAcct, loanAcct],
@@ -50,20 +76,30 @@ export class App extends Component<{}, AppState> {
     return store.get("savedState") || [];
   }
 
-  handleAccountChange(obj: any, objIndex: number) {
+  handleAccountChange(
+    obj: Account,
+    objIndex: number,
+    shouldRemove: boolean = false
+  ) {
     // this will be an account coming in
 
-    console.log("account change", obj, objIndex);
+    console.log("account change", obj, objIndex, shouldRemove);
 
-    let newAccounts: any[] = [];
+    let newAccounts: Account[] = [];
 
-    this.state.accounts.forEach((account: any, index: number) => {
+    this.state.accounts.forEach((account, index) => {
       if (objIndex === index) {
-        newAccounts.push(obj);
+        if (!shouldRemove) {
+          newAccounts.push(obj);
+        }
       } else {
         newAccounts.push(account);
       }
     });
+
+    if (objIndex === -1) {
+      newAccounts.push(obj);
+    }
 
     this.setState({ accounts: newAccounts });
   }
@@ -93,11 +129,33 @@ export class App extends Component<{}, AppState> {
         savedState[key] = this.state[key];
       }
 
-      let saveName = window.prompt("Enter a name for saving") as string;
+      let saveName = window.prompt("Enter a name for saving") || "";
 
-      // put into a new object
+      let saveData = new SavedState();
+      saveData.name = saveName;
 
-      let saveData = { name: saveName, data: savedState };
+      let passphrase =
+        window.prompt("Enter a passphrase or blank for no encryption") || "";
+
+      let isEncrypted = passphrase !== "";
+
+      if (isEncrypted) {
+        const encryptedData = CryptoJS.AES.encrypt(
+          JSON.stringify(savedState),
+          passphrase
+        );
+
+        const encryptedCheck = CryptoJS.AES.encrypt("true", passphrase);
+
+        saveData.encryptedData = encryptedData.toString();
+        saveData.encrytedCheck = encryptedCheck.toString();
+      } else {
+        saveData.data = savedState;
+      }
+
+      console.log("save data", saveData);
+
+      // add to existing objects
       let savedObj = [...this.state.savedObj, saveData];
 
       store.set("savedState", savedObj);
@@ -107,14 +165,38 @@ export class App extends Component<{}, AppState> {
     } else if (obj.key === "load") {
       // iterate through the saved ones for the id
       console.log("loading the saved state");
-      let matches = this.state.savedObj.filter(
-        (item: any) => item.name === obj.id
-      );
+      let stateToLoad = this.state.savedObj.find(
+        item => item.name === obj.id
+      ) as SavedState;
 
-      console.log(matches);
-      console.log({ ...matches[0].data });
+      // check for encryption
 
-      this.setState({ ...matches[0].data });
+      let shouldLoad = true;
+
+      if (stateToLoad.encryptedData !== "") {
+        const passphrase = window.prompt("Please enter the passphrase") || "";
+
+        // check is passphrase is OK
+        const encryptedCheck = CryptoJS.AES
+          .decrypt(stateToLoad.encrytedCheck, passphrase)
+          .toString(CryptoJS.enc.Utf8);
+
+        if (encryptedCheck === "true") {
+          stateToLoad.data = JSON.parse(
+            CryptoJS.AES
+              .decrypt(stateToLoad.encryptedData, passphrase)
+              .toString(CryptoJS.enc.Utf8)
+          );
+        } else {
+          shouldLoad = false;
+          alert("passphrase was wrong... will not load");
+        }
+      }
+
+      if (shouldLoad) {
+        stateToLoad.data = StateObj.FromJson(stateToLoad.data);
+        this.setState({ ...stateToLoad.data });
+      }
 
       // push that data into the current state
     }
