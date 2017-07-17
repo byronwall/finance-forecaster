@@ -2,7 +2,7 @@ import * as React from "react";
 import { Component } from "react";
 import { Table, FormControl } from "react-bootstrap";
 
-import { Transfer, LoanAccount } from "../Models/Account";
+import { Transfer, LoanAccount, Account } from "../Models/Account";
 
 import { TransferGroup } from "./TransferGroup";
 import { handleInput } from "../Helpers/Functions";
@@ -10,6 +10,7 @@ import { handleInput } from "../Helpers/Functions";
 interface LoanOutputTableProps {
   account: LoanAccount;
   index: number;
+  accounts: Account[];
   handleAccountChange: (obj: any, index: number) => void;
 }
 
@@ -92,6 +93,7 @@ export class LoanOutputTable extends Component<LoanOutputTableProps> {
         <TransferGroup
           transfers={this.props.account.transfers}
           handleNewTransfer={(obj: Transfer) => this.handleNewTransfer(obj)}
+          accounts={this.props.accounts}
         />
 
         <h3>output table</h3>

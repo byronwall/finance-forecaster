@@ -1,11 +1,20 @@
-export interface Account {
+export abstract class Account {
+  static _id: number = 0;
   type: string;
   name: string;
 
-  getCashFlows: (months: number) => CashFlow[];
+  id: number;
+
+  transfers: Transfer[] = [];
+
+  abstract getCashFlows(months: number): CashFlow[];
+
+  constructor() {
+    this.id = Account._id++;
+  }
 }
 
-export class LoanAccount implements Account {
+export class LoanAccount extends Account {
   type = "loan";
   name = "testing";
 
@@ -13,8 +22,6 @@ export class LoanAccount implements Account {
   annualRate: number;
   startingBalance: number;
   start: number;
-
-  transfers: Transfer[] = [];
 
   getCashFlows(months: number) {
     let cashFlowsOut = [];
@@ -59,13 +66,11 @@ export class LoanAccount implements Account {
   }
 }
 
-export class CashAccount implements Account {
+export class CashAccount extends Account {
   startAmount: number;
 
   type = "cash";
   name = "testing";
-
-  transfers: Transfer[] = [];
 
   getCashFlows(months: number) {
     let cashFlowsOut = [];
@@ -120,10 +125,19 @@ export class LoanCashFlow implements CashFlow {
 }
 
 export class Transfer {
-  fromAccount: number;
-  toAccount: number;
+  static _id: number = 0;
+
+  fromAccount: Account;
+  toAccount: Account;
+
   amount: number;
   frequency: number;
   start: number;
   end: number;
+
+  id: number;
+
+  constructor() {
+    this.id = Transfer._id++;
+  }
 }

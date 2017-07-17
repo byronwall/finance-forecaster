@@ -2,11 +2,12 @@ import * as React from "react";
 import { Component } from "react";
 import { Table, FormControl, Button } from "react-bootstrap";
 
-import { Transfer } from "../Models/Account";
+import { Transfer, Account } from "../Models/Account";
 import { $N, handleInput } from "../Helpers/Functions";
 
 interface TransferGroupProps {
   transfers: Transfer[];
+  accounts: Account[];
   handleNewTransfer: (obj: Transfer) => void;
 }
 
@@ -27,19 +28,17 @@ export class TransferGroup extends Component<
   }
 
   handleNewTransferEdit(data: any) {
-    let newState = { ...this.state.newTransfer };
-
-    for (let key of Object.keys(data)) {
-      newState[key] = data[key];
-    }
+    let newState = new Transfer();
+    newState = { ...newState, ...this.state.newTransfer, ...data };
 
     this.setState({ newTransfer: newState });
   }
 
   handleNewTransfer() {
-    let newObj = { ...this.state.newTransfer };
+    let newState = new Transfer();
+    newState = { ...newState, ...this.state.newTransfer };
 
-    this.props.handleNewTransfer(newObj);
+    this.props.handleNewTransfer(newState);
 
     this.setState({ newTransfer: new Transfer() });
   }
@@ -61,6 +60,8 @@ export class TransferGroup extends Component<
                     {column}
                   </th>
                 )}
+                <th>to account</th>
+                <th>from account</th>
                 <th />
               </tr>
             </thead>
@@ -73,6 +74,13 @@ export class TransferGroup extends Component<
                       {transfer[column]}
                     </td>
                   )}
+
+                  <td>
+                    {transfer.toAccount.name}
+                  </td>
+                  <td>
+                    {transfer.fromAccount.name}
+                  </td>
                 </tr>
               )}
 
@@ -91,8 +99,28 @@ export class TransferGroup extends Component<
                   </td>
                 )}
                 <td>
+                  <FormControl componentClass="select">
+                    {this.props.accounts.map(account =>
+                      <option key={account.id}>
+                        {account.name}
+                      </option>
+                    )}
+                  </FormControl>
+                </td>
+
+                <td>
+                  <FormControl componentClass="select">
+                    {this.props.accounts.map(account =>
+                      <option key={account.id}>
+                        {account.name}
+                      </option>
+                    )}
+                  </FormControl>
+                </td>
+
+                <td>
                   <Button onClick={() => this.handleNewTransfer()}>
-                    {"add new"}
+                    {"add"}
                   </Button>
                 </td>
               </tr>

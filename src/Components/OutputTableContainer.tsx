@@ -82,6 +82,7 @@ export default class OutputTableContainer extends Component<
             account={account as CashAccount}
             handleAccountChange={this.props.handleAccountChange}
             index={this.state.activeAccount}
+            accounts={this.props.accounts}
           />
         );
       case "loan":
@@ -90,6 +91,7 @@ export default class OutputTableContainer extends Component<
             account={account as LoanAccount}
             handleAccountChange={this.props.handleAccountChange}
             index={this.state.activeAccount}
+            accounts={this.props.accounts}
           />
         );
       default:
