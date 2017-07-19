@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Component } from "react";
 import { Panel, Col } from "react-bootstrap";
-import OutputTableHeader from "./OutputTableHeader";
+import { AccountList } from "./AccountList";
 
 import { LoanAccount, AccountTypes } from "../Models/Account";
 
@@ -17,7 +17,7 @@ interface OutputTableContainerState {
   activeAccount: number;
 }
 
-export default class OutputTableContainer extends Component<
+export class OutputTableContainer extends Component<
   OutputTableContainerProps,
   OutputTableContainerState
 > {
@@ -93,7 +93,7 @@ export default class OutputTableContainer extends Component<
       <div>
         <Panel header="Output">
           <Col md={3}>
-            <OutputTableHeader
+            <AccountList
               accounts={this.props.accounts}
               activeAccount={this.state.activeAccount}
               handleChange={this.handleChange}

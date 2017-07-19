@@ -2,13 +2,13 @@ import * as React from "react";
 import { Component } from "react";
 
 import {} from "./Chart";
-import SavedStores from "./SavedStores";
+import { SavedStores } from "./SavedStores";
 
 import * as store from "store";
 
 import { Grid, Row, Col, PageHeader } from "react-bootstrap";
 import { LoanAccount, Transfer, AccountTypes } from "../Models/Account";
-import OutputTableContainer from "./OutputTableContainer";
+import { OutputTableContainer } from "./OutputTableContainer";
 
 import * as CryptoJS from "crypto-js";
 import { DataSchema } from "../Models/DataSchema";
@@ -220,10 +220,6 @@ export class App extends Component<{}, AppState> {
 
       // push that data into the current state
     }
-  }
-
-  componentDidMount() {
-    console.log("mounted");
   }
 
   render() {

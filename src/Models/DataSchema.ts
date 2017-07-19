@@ -3,7 +3,7 @@ import { Transfer, LoanAccount } from "./Account";
 import { StateObj } from "../Components/App";
 
 const transferSchema = new schema.Entity(
-  "transfer",
+  "transfers",
   {},
   {
     processStrategy: (value: Transfer, parent, key) => {

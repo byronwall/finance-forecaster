@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Component } from "react";
-import { Table, FormControl, Button } from "react-bootstrap";
+import { Table, FormControl, Button, Glyphicon } from "react-bootstrap";
 
 import { Transfer, LoanAccount } from "../Models/Account";
 import { $N, handleInput } from "../Helpers/Functions";
@@ -125,8 +125,11 @@ export class TransferGroup extends Component<
                 </td>
 
                 <td>
-                  <Button onClick={() => this.handleNewTransfer()}>
-                    {"add"}
+                  <Button
+                    onClick={() => this.handleNewTransfer()}
+                    bsSize="small"
+                  >
+                    <Glyphicon glyph="plus" />
                   </Button>
                 </td>
               </tr>

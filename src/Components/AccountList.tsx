@@ -2,7 +2,13 @@ import * as React from "react";
 import { Component } from "react";
 
 import { LoanAccount } from "../Models/Account";
-import { ListGroup, ListGroupItem, Button, Glyphicon } from "react-bootstrap";
+import {
+  ListGroup,
+  ListGroupItem,
+  Button,
+  Glyphicon,
+  ButtonGroup
+} from "react-bootstrap";
 
 interface OutputTableHeaderProps {
   accounts: LoanAccount[];
@@ -12,20 +18,20 @@ interface OutputTableHeaderProps {
   handleRemoveAccount: (index: number) => void;
 }
 
-export default class OutputTableHeader extends Component<
-  OutputTableHeaderProps
-> {
+export class AccountList extends Component<OutputTableHeaderProps> {
   render() {
     return (
       <div>
         <h2>accounts</h2>
         <div>
-          <Button onClick={() => this.props.handleNewAccount("cash")}>
-            {"add cash acct"}
-          </Button>
-          <Button onClick={() => this.props.handleNewAccount("loan")}>
-            {"add loan acct"}
-          </Button>
+          <ButtonGroup>
+            <Button onClick={() => this.props.handleNewAccount("cash")}>
+              <Glyphicon glyph="plus" /> {"cash"}
+            </Button>
+            <Button onClick={() => this.props.handleNewAccount("loan")}>
+              <Glyphicon glyph="plus" /> {"loan"}
+            </Button>
+          </ButtonGroup>
         </div>
 
         <ListGroup>
@@ -44,6 +50,7 @@ export default class OutputTableHeader extends Component<
                 }}
                 bsSize="sm"
                 className="pull-right"
+                bsStyle="danger"
               >
                 <Glyphicon glyph="remove" />
               </Button>

@@ -4,7 +4,7 @@ import { Panel, ListGroup, Button } from "react-bootstrap";
 
 import SavedStore from "./SavedStore";
 
-export default class SavedStores extends Component<any, any> {
+export class SavedStores extends Component<any, any> {
   constructor(props: any) {
     super(props);
 
