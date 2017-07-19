@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Component } from "react";
 
-import { Account } from "../Models/Account";
+import { Acct } from "../Models/Account";
 import { ListGroup, ListGroupItem, Button, Glyphicon } from "react-bootstrap";
 
 interface OutputTableHeaderProps {
-  accounts: Account[];
+  accounts: Acct[];
   activeAccount: number;
   handleChange: (newAcive: number) => void;
   handleNewAccount: (type: string) => void;

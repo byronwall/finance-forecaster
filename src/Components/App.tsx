@@ -7,24 +7,20 @@ import SavedStores from "./SavedStores";
 import * as store from "store";
 
 import { Grid, Row, Col, PageHeader } from "react-bootstrap";
-import { CashAccount, LoanAccount, Account, Transfer } from "../Models/Account";
+import { CashAccount, LoanAccount, Acct, Transfer } from "../Models/Account";
 import OutputTableContainer from "./OutputTableContainer";
 
 import * as CryptoJS from "crypto-js";
 
-import { normalize, schema, denormalize } from "normalizr";
-
-const denormalizr = require("denormalizr");
-
-class StateObj {
-  accounts: Account[] = [];
+export class StateObj {
+  accounts: Acct[] = [];
 
   static FromJson(data: StateObj): StateObj {
     let stateObj = new StateObj();
 
     // handle accounts
     data.accounts.forEach(account => {
-      let newAccount: Account = {} as Account;
+      let newAccount: Acct = {} as Acct;
       if (account.type === "cash") {
         newAccount = new CashAccount();
         Object.assign(newAccount, account);
@@ -68,6 +64,8 @@ export class App extends Component<{}, AppState> {
   constructor(props: {}) {
     super(props);
 
+    // TODO: move the data creation somewhere else
+
     let cashAcct = new CashAccount();
     cashAcct.name = "cash";
     cashAcct.startAmount = 500;
@@ -103,7 +101,7 @@ export class App extends Component<{}, AppState> {
   }
 
   handleAccountChange(
-    obj: Account,
+    obj: Acct,
     objIndex: number,
     shouldRemove: boolean = false
   ) {
@@ -111,7 +109,7 @@ export class App extends Component<{}, AppState> {
 
     console.log("account change", obj, objIndex, shouldRemove);
 
-    let newAccounts: Account[] = [];
+    let newAccounts: Acct[] = [];
 
     this.state.accounts.forEach((account, index) => {
       if (objIndex === index) {
@@ -233,64 +231,6 @@ export class App extends Component<{}, AppState> {
   }
 
   render() {
-    const transferSchema = new schema.Entity(
-      "transfer",
-      {},
-      {
-        processStrategy: (value: Transfer, parent, key) => {
-          // this strategy will break the recursion
-          return {
-            ...value,
-            toAccount: value.toAccount.id,
-            fromAccount: value.fromAccount.id
-          };
-        }
-      }
-    );
-    const accountSchema = new schema.Entity("accounts", {
-      transfers: [transferSchema]
-    });
-    const accountsSchema = [accountSchema];
-
-    transferSchema.define({
-      toAccount: accountSchema,
-      fromAccount: accountSchema
-    });
-
-    const normalizedData = normalize(this.state.accounts, accountsSchema);
-
-    console.log("original", this.state.accounts);
-    console.log("norm", normalizedData);
-
-    const denormal = denormalize(
-      normalizedData.result,
-      accountsSchema,
-      normalizedData.entities
-    );
-
-    const denormal2 = denormalizr.denormalize(
-      normalizedData.result,
-      normalizedData.entities,
-      accountsSchema
-    );
-
-    console.log("denom1", denormal);
-    console.log("denom2", denormal2);
-
-    console.log(
-      "ref test",
-      denormal[1]["transfers"][0]["fromAccount"] === denormal[0]
-    );
-
-    console.log(
-      "ref test2",
-      denormal2[1]["transfers"][0]["fromAccount"] === denormal2[0]
-    );
-
-    const newState = StateObj.FromJson({ accounts: denormal });
-
-    console.log("w/ const", newState);
-
     return (
       <div>
         <Grid>

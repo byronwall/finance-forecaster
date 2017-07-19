@@ -2,7 +2,7 @@ import * as React from "react";
 import { Component } from "react";
 import { Table, FormControl } from "react-bootstrap";
 
-import { CashAccount, Transfer, Account } from "../Models/Account";
+import { CashAccount, Transfer, Acct } from "../Models/Account";
 
 import { TransferGroup } from "./TransferGroup";
 import { handleInput, $N } from "../Helpers/Functions";
@@ -10,7 +10,7 @@ import { handleInput, $N } from "../Helpers/Functions";
 interface CashOutputTableProps {
   account: CashAccount;
   index: number;
-  accounts: Account[];
+  accounts: Acct[];
   handleAccountChange: (obj: any, index: number) => void;
 }
 

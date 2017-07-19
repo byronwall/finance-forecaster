@@ -1,4 +1,4 @@
-export abstract class Account {
+export abstract class Acct {
   static _id: number = 0;
   type: string;
   name: string;
@@ -10,11 +10,11 @@ export abstract class Account {
   abstract getCashFlows(months: number): CashFlow[];
 
   constructor() {
-    this.id = Account._id++;
+    this.id = Acct._id++;
   }
 }
 
-export class LoanAccount extends Account {
+export class LoanAccount extends Acct {
   type = "loan";
   name = "testing";
 
@@ -66,7 +66,7 @@ export class LoanAccount extends Account {
   }
 }
 
-export class CashAccount extends Account {
+export class CashAccount extends Acct {
   startAmount: number;
 
   type = "cash";
@@ -86,7 +86,11 @@ export class CashAccount extends Account {
             (month - transfer.start) % transfer.frequency === 0) ||
           (transfer.frequency === 0 && transfer.start === month)
         ) {
-          monthIncome += transfer.amount;
+          if (transfer.toAccount === this) {
+            monthIncome += transfer.amount;
+          } else {
+            monthIncome -= transfer.amount;
+          }
         }
       });
 
@@ -127,8 +131,8 @@ export class LoanCashFlow implements CashFlow {
 export class Transfer {
   static _id: number = 0;
 
-  fromAccount: Account;
-  toAccount: Account;
+  fromAccount: Acct;
+  toAccount: Acct;
 
   amount: number;
   frequency: number;

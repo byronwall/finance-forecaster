@@ -2,12 +2,12 @@ import * as React from "react";
 import { Component } from "react";
 import { Table, FormControl, Button } from "react-bootstrap";
 
-import { Transfer, Account } from "../Models/Account";
+import { Transfer, Acct } from "../Models/Account";
 import { $N, handleInput } from "../Helpers/Functions";
 
 interface TransferGroupProps {
   transfers: Transfer[];
-  accounts: Account[];
+  accounts: Acct[];
   handleNewTransfer: (obj: Transfer) => void;
 }
 
@@ -105,6 +105,9 @@ export class TransferGroup extends Component<
                         {account.name}
                       </option>
                     )}
+                    <option>
+                      {"**thin air"}
+                    </option>
                   </FormControl>
                 </td>
 

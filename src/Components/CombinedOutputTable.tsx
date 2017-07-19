@@ -2,13 +2,13 @@ import * as React from "react";
 import { Component } from "react";
 import { Table } from "react-bootstrap";
 
-import { Account, CashFlow } from "../Models/Account";
+import { Acct, CashFlow } from "../Models/Account";
 
 import {} from "./TransferGroup";
 import {} from "../Helpers/Functions";
 
 interface CombinedOutputTableProps {
-  accounts: Account[];
+  accounts: Acct[];
 }
 
 export class CombinedOutputTable extends Component<CombinedOutputTableProps> {

@@ -3,13 +3,13 @@ import { Component } from "react";
 import { Panel, Col } from "react-bootstrap";
 import OutputTableHeader from "./OutputTableHeader";
 
-import { Account, CashAccount, LoanAccount } from "../Models/Account";
+import { Acct, CashAccount, LoanAccount } from "../Models/Account";
 import { CashOutputTable } from "./CashOutputTable";
 import { LoanOutputTable } from "./LoanOutputTable";
 import { CombinedOutputTable } from "./CombinedOutputTable";
 
 interface OutputTableContainerProps {
-  accounts: Account[];
+  accounts: Acct[];
   handleAccountChange: (
     obj: any,
     index: number,
@@ -70,7 +70,7 @@ export default class OutputTableContainer extends Component<
     this.props.handleAccountChange(null, index, true);
   }
 
-  getAccountTable(account: Account) {
+  getAccountTable(account: Acct) {
     if (this.state.activeAccount === -1) {
       return <CombinedOutputTable accounts={this.props.accounts} />;
     }
