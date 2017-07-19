@@ -93,3 +93,32 @@ export class Transfer {
     this.id = ++Transfer._id;
   }
 }
+
+export class SampleData {
+  static getTypicalExample() {
+    let cashAcct = new LoanAccount();
+    cashAcct.name = "cash";
+    cashAcct.type = AccountTypes.Cash;
+    cashAcct.startingBalance = 500;
+
+    let loanAcct = new LoanAccount();
+    loanAcct.name = "loan";
+    cashAcct.type = AccountTypes.Loan;
+    loanAcct.startingBalance = -300000;
+    loanAcct.term = 30 * 12;
+    loanAcct.annualRate = 3.87;
+    loanAcct.start = 0;
+
+    let xfer = new Transfer();
+    xfer.amount = 100;
+    xfer.start = 0;
+    xfer.frequency = 1;
+    xfer.toAccount = loanAcct;
+    xfer.fromAccount = cashAcct;
+
+    cashAcct.transfers.push(xfer);
+    loanAcct.transfers.push(xfer);
+
+    return [cashAcct, loanAcct];
+  }
+}

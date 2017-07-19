@@ -1,16 +1,16 @@
 import * as React from "react";
+import * as store from "store";
+import * as CryptoJS from "crypto-js";
+
 import { Component } from "react";
 
 import {} from "./Chart";
 import { SavedStores } from "./SavedStores";
 
-import * as store from "store";
-
 import { Grid, Row, Col, PageHeader } from "react-bootstrap";
-import { LoanAccount, Transfer, AccountTypes } from "../Models/Account";
+import { LoanAccount, Transfer, SampleData } from "../Models/Account";
 import { OutputTableContainer } from "./OutputTableContainer";
 
-import * as CryptoJS from "crypto-js";
 import { DataSchema } from "../Models/DataSchema";
 
 export class StateObj {
@@ -59,31 +59,10 @@ export class App extends Component<{}, AppState> {
 
     // TODO: move the data creation somewhere else
 
-    let cashAcct = new LoanAccount();
-    cashAcct.name = "cash";
-    cashAcct.type = AccountTypes.Cash;
-    cashAcct.startingBalance = 500;
-
-    let loanAcct = new LoanAccount();
-    loanAcct.name = "loan";
-    cashAcct.type = AccountTypes.Loan;
-    loanAcct.startingBalance = -300000;
-    loanAcct.term = 30 * 12;
-    loanAcct.annualRate = 3.87;
-    loanAcct.start = 0;
-
-    let xfer = new Transfer();
-    xfer.amount = 100;
-    xfer.start = 0;
-    xfer.frequency = 1;
-    xfer.toAccount = loanAcct;
-    xfer.fromAccount = cashAcct;
-
-    cashAcct.transfers.push(xfer);
-    loanAcct.transfers.push(xfer);
+    const cashLoanExampleAccts = SampleData.getTypicalExample();
 
     this.state = {
-      accounts: [cashAcct, loanAcct],
+      accounts: cashLoanExampleAccts,
       savedObj: this.getSavedObj()
     };
 
