@@ -10,7 +10,7 @@ export abstract class Acct {
   abstract getCashFlows(months: number): CashFlow[];
 
   constructor() {
-    this.id = Acct._id++;
+    this.id = ++Acct._id;
   }
 }
 
@@ -41,7 +41,11 @@ export class LoanAccount extends Acct {
               (month - transfer.start) % transfer.frequency === 0) ||
             (transfer.frequency === 0 && transfer.start === month)
           ) {
-            monthPayments += transfer.amount;
+            if (transfer.toAccount === this) {
+              monthPayments += transfer.amount;
+            } else {
+              monthPayments -= transfer.amount;
+            }
           }
         });
 
@@ -142,6 +146,6 @@ export class Transfer {
   id: number;
 
   constructor() {
-    this.id = Transfer._id++;
+    this.id = ++Transfer._id;
   }
 }

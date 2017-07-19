@@ -1,5 +1,5 @@
 import { normalize, schema, denormalize } from "normalizr";
-import { Transfer } from "./Account";
+import { Transfer, Acct } from "./Account";
 import { StateObj } from "../Components/App";
 
 const transferSchema = new schema.Entity(
@@ -27,12 +27,14 @@ transferSchema.define({
 });
 
 export class DataSchema {
-  static normalizeData(accounts: Account[]) {
+  static normalizeData(accounts: Acct[]) {
     console.log("original", accounts);
 
     const normalizedData = normalize(accounts, accountsSchema);
 
     console.log("norm", normalizedData);
+
+    return normalizedData;
   }
   static denormalizeAccounts(normalizedData: any) {
     const denormal = denormalize(

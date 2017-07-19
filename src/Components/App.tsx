@@ -11,6 +11,7 @@ import { CashAccount, LoanAccount, Acct, Transfer } from "../Models/Account";
 import OutputTableContainer from "./OutputTableContainer";
 
 import * as CryptoJS from "crypto-js";
+import { DataSchema } from "../Models/DataSchema";
 
 export class StateObj {
   accounts: Acct[] = [];
@@ -129,6 +130,7 @@ export class App extends Component<{}, AppState> {
   }
 
   handleStoreChange(obj: any) {
+    // TODO: move this out of the App class
     console.log("handleStoreChange", obj);
 
     if (obj.key === "remove") {
@@ -231,6 +233,11 @@ export class App extends Component<{}, AppState> {
   }
 
   render() {
+    // test the normalization
+
+    const normData = DataSchema.normalizeData(this.state.accounts);
+    console.log("normData", normData);
+
     return (
       <div>
         <Grid>
