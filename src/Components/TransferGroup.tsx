@@ -2,12 +2,12 @@ import * as React from "react";
 import { Component } from "react";
 import { Table, FormControl, Button } from "react-bootstrap";
 
-import { Transfer, Acct } from "../Models/Account";
+import { Transfer, LoanAccount } from "../Models/Account";
 import { $N, handleInput } from "../Helpers/Functions";
 
 interface TransferGroupProps {
   transfers: Transfer[];
-  accounts: Acct[];
+  accounts: LoanAccount[];
   handleNewTransfer: (obj: Transfer) => void;
 }
 

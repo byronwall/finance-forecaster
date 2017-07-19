@@ -2,15 +2,15 @@ import * as React from "react";
 import { Component } from "react";
 import { Table, FormControl } from "react-bootstrap";
 
-import { Transfer, LoanAccount, Acct } from "../Models/Account";
+import { Transfer, LoanAccount } from "../Models/Account";
 
 import { TransferGroup } from "./TransferGroup";
-import { handleInput } from "../Helpers/Functions";
+import { handleInput, $N } from "../Helpers/Functions";
 
 interface LoanOutputTableProps {
   account: LoanAccount;
   index: number;
-  accounts: Acct[];
+  accounts: LoanAccount[];
   handleAccountChange: (obj: any, index: number) => void;
 }
 
@@ -77,7 +77,7 @@ export class LoanOutputTable extends Component<LoanOutputTableProps> {
                     <FormControl
                       type="text"
                       placeholder={column}
-                      value={this.props.account[column]}
+                      value={$N(this.props.account[column], "")}
                       onChange={(e: any) =>
                         this.handleAccountChange({
                           [column]: funcs[index](e.target.value)

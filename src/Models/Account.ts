@@ -1,40 +1,39 @@
-export abstract class Acct {
-  static _id: number = 0;
-  type: string;
-  name: string;
-
-  id: number;
-
-  transfers: Transfer[] = [];
-
-  abstract getCashFlows(months: number): CashFlow[];
-
-  constructor() {
-    this.id = ++Acct._id;
-  }
+export const enum AccountTypes {
+  Cash,
+  Loan
 }
 
-export class LoanAccount extends Acct {
-  type = "loan";
-  name = "testing";
+export class LoanAccount {
+  static _id: number = 0;
+  type: AccountTypes = AccountTypes.Loan;
+
+  name: string;
 
   term: number;
   annualRate: number;
   startingBalance: number;
   start: number;
 
+  transfers: Transfer[] = [];
+
+  id: number;
+
+  constructor() {
+    this.id = ++LoanAccount._id;
+  }
+
   getCashFlows(months: number) {
     let cashFlowsOut = [];
     let prevBalance = this.startingBalance;
 
-    let monthRate = this.annualRate / 100 / 12;
+    let monthRate = (this.annualRate || 0) / 100 / 12;
 
     for (let month = 0; month < months; month++) {
       let monthPayments = 0;
       let curBalance = 0;
       let interest = 0;
 
-      if (this.start <= month) {
+      if ((this.start || 0) <= month) {
         this.transfers.forEach(transfer => {
           if (
             (transfer.start <= month &&
@@ -70,62 +69,7 @@ export class LoanAccount extends Acct {
   }
 }
 
-export class CashAccount extends Acct {
-  startAmount: number;
-
-  type = "cash";
-  name = "testing";
-
-  getCashFlows(months: number) {
-    let cashFlowsOut = [];
-    let prevBalance = this.startAmount;
-
-    for (let month = 0; month < months; month++) {
-      let monthIncome = 0;
-      // check the transfer to see if somethign affects it
-
-      this.transfers.forEach(transfer => {
-        if (
-          (transfer.start <= month &&
-            (month - transfer.start) % transfer.frequency === 0) ||
-          (transfer.frequency === 0 && transfer.start === month)
-        ) {
-          if (transfer.toAccount === this) {
-            monthIncome += transfer.amount;
-          } else {
-            monthIncome -= transfer.amount;
-          }
-        }
-      });
-
-      let curBalance = prevBalance + monthIncome;
-
-      let cashFlow = new CashCashFlow();
-      cashFlow.balance = curBalance;
-      cashFlow.month = month;
-      cashFlow.net = monthIncome;
-
-      cashFlowsOut.push(cashFlow);
-
-      prevBalance = curBalance;
-    }
-
-    return cashFlowsOut;
-  }
-}
-
-export interface CashFlow {
-  balance: number;
-  month: number;
-}
-
-export class CashCashFlow implements CashFlow {
-  balance: number;
-  net: number;
-  month: number;
-}
-
-export class LoanCashFlow implements CashFlow {
+export class LoanCashFlow {
   balance: number;
   payments: number;
   month: number;
@@ -135,8 +79,8 @@ export class LoanCashFlow implements CashFlow {
 export class Transfer {
   static _id: number = 0;
 
-  fromAccount: Acct;
-  toAccount: Acct;
+  fromAccount: LoanAccount;
+  toAccount: LoanAccount;
 
   amount: number;
   frequency: number;

@@ -3,18 +3,14 @@ import { Component } from "react";
 import { Panel, Col } from "react-bootstrap";
 import OutputTableHeader from "./OutputTableHeader";
 
-import { Acct, CashAccount, LoanAccount } from "../Models/Account";
-import { CashOutputTable } from "./CashOutputTable";
+import { LoanAccount, AccountTypes } from "../Models/Account";
+
 import { LoanOutputTable } from "./LoanOutputTable";
 import { CombinedOutputTable } from "./CombinedOutputTable";
 
 interface OutputTableContainerProps {
-  accounts: Acct[];
-  handleAccountChange: (
-    obj: any,
-    index: number,
-    shouldRemove?: boolean
-  ) => void;
+  accounts: LoanAccount[];
+  handleAccountChange(obj: any, index: number, shouldRemove?: boolean): void;
 }
 
 interface OutputTableContainerState {
@@ -44,12 +40,7 @@ export default class OutputTableContainer extends Component<
   handleNewAccount(acctType: string) {
     // add the account
 
-    let newAccount;
-    if (acctType === "cash") {
-      newAccount = new CashAccount();
-    } else if (acctType === "loan") {
-      newAccount = new LoanAccount();
-    }
+    let newAccount = new LoanAccount();
 
     const currentLength = this.props.accounts.length;
 
@@ -70,22 +61,14 @@ export default class OutputTableContainer extends Component<
     this.props.handleAccountChange(null, index, true);
   }
 
-  getAccountTable(account: Acct) {
+  getAccountTable(account: LoanAccount) {
     if (this.state.activeAccount === -1) {
       return <CombinedOutputTable accounts={this.props.accounts} />;
     }
 
     switch (account.type) {
-      case "cash":
-        return (
-          <CashOutputTable
-            account={account as CashAccount}
-            handleAccountChange={this.props.handleAccountChange}
-            index={this.state.activeAccount}
-            accounts={this.props.accounts}
-          />
-        );
-      case "loan":
+      case AccountTypes.Loan:
+      case AccountTypes.Cash:
         return (
           <LoanOutputTable
             account={account as LoanAccount}
@@ -102,7 +85,7 @@ export default class OutputTableContainer extends Component<
   render() {
     let activeAccount = this.props.accounts.find(
       (account, index) => index === this.state.activeAccount
-    ) as CashAccount;
+    )!;
 
     console.log("active account", activeAccount);
 

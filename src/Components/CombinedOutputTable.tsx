@@ -2,13 +2,13 @@ import * as React from "react";
 import { Component } from "react";
 import { Table } from "react-bootstrap";
 
-import { Acct, CashFlow } from "../Models/Account";
+import { LoanAccount, LoanCashFlow } from "../Models/Account";
 
 import {} from "./TransferGroup";
 import {} from "../Helpers/Functions";
 
 interface CombinedOutputTableProps {
-  accounts: Acct[];
+  accounts: LoanAccount[];
 }
 
 export class CombinedOutputTable extends Component<CombinedOutputTableProps> {
@@ -16,14 +16,14 @@ export class CombinedOutputTable extends Component<CombinedOutputTableProps> {
     // iterate all accounts, get the cash flows, combine the cash flows
 
     // TODO: take this code and put it somewhere common so it can be used elsewhere (for charting)
-    let cashFlows: CashFlow[][] = [];
+    let cashFlows: LoanCashFlow[][] = [];
 
     this.props.accounts.forEach(account => {
       cashFlows.push(account.getCashFlows(24));
     });
 
     // combine the cash flows
-    let combinedCashFlow: CashFlow[] = [];
+    let combinedCashFlow: LoanCashFlow[] = [];
 
     cashFlows.forEach((cashFlow, index) => {
       if (index === 0) {

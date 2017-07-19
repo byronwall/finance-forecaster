@@ -7,32 +7,24 @@ import SavedStores from "./SavedStores";
 import * as store from "store";
 
 import { Grid, Row, Col, PageHeader } from "react-bootstrap";
-import { CashAccount, LoanAccount, Acct, Transfer } from "../Models/Account";
+import { LoanAccount, Transfer, AccountTypes } from "../Models/Account";
 import OutputTableContainer from "./OutputTableContainer";
 
 import * as CryptoJS from "crypto-js";
 import { DataSchema } from "../Models/DataSchema";
 
 export class StateObj {
-  accounts: Acct[] = [];
+  accounts: LoanAccount[] = [];
 
   static FromJson(data: StateObj): StateObj {
     let stateObj = new StateObj();
 
     // handle accounts
     data.accounts.forEach(account => {
-      let newAccount: Acct = {} as Acct;
-      if (account.type === "cash") {
-        newAccount = new CashAccount();
-        Object.assign(newAccount, account);
+      let newAccount = new LoanAccount();
+      Object.assign(newAccount, account);
 
-        stateObj.accounts.push(newAccount);
-      } else if (account.type === "loan") {
-        newAccount = new LoanAccount();
-        Object.assign(newAccount, account);
-
-        stateObj.accounts.push(newAccount);
-      }
+      stateObj.accounts.push(newAccount);
 
       let newTransfers: Transfer[] = [];
 
@@ -67,12 +59,14 @@ export class App extends Component<{}, AppState> {
 
     // TODO: move the data creation somewhere else
 
-    let cashAcct = new CashAccount();
+    let cashAcct = new LoanAccount();
     cashAcct.name = "cash";
-    cashAcct.startAmount = 500;
+    cashAcct.type = AccountTypes.Cash;
+    cashAcct.startingBalance = 500;
 
     let loanAcct = new LoanAccount();
     loanAcct.name = "loan";
+    cashAcct.type = AccountTypes.Loan;
     loanAcct.startingBalance = -300000;
     loanAcct.term = 30 * 12;
     loanAcct.annualRate = 3.87;
@@ -102,7 +96,7 @@ export class App extends Component<{}, AppState> {
   }
 
   handleAccountChange(
-    obj: Acct,
+    obj: LoanAccount,
     objIndex: number,
     shouldRemove: boolean = false
   ) {
@@ -110,7 +104,7 @@ export class App extends Component<{}, AppState> {
 
     console.log("account change", obj, objIndex, shouldRemove);
 
-    let newAccounts: Acct[] = [];
+    let newAccounts: LoanAccount[] = [];
 
     this.state.accounts.forEach((account, index) => {
       if (objIndex === index) {
