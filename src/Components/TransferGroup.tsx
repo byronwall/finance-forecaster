@@ -43,6 +43,35 @@ export class TransferGroup extends Component<
     this.setState({ newTransfer: new Transfer() });
   }
 
+  handleTransferAccount(direction: "to" | "from", id: number) {
+    let newState = new Transfer();
+    Object.assign(newState, this.state.newTransfer);
+
+    // TODO: determine why a === does not work here
+    let matchingAccount = this.props.accounts.find(
+      account => account.id == id
+    )!;
+
+    if (direction === "to") {
+      newState.toAccount = matchingAccount;
+    } else if (direction === "from") {
+      newState.fromAccount = matchingAccount;
+    }
+
+    console.log(
+      "new xfer obj",
+      newState,
+      "accounts",
+      this.props.accounts,
+      "id",
+      id,
+      "match",
+      matchingAccount
+    );
+
+    this.setState({ newTransfer: newState });
+  }
+
   render() {
     let transfers = this.props.transfers;
 
@@ -99,9 +128,13 @@ export class TransferGroup extends Component<
                   </td>
                 )}
                 <td>
-                  <FormControl componentClass="select">
+                  <FormControl
+                    componentClass="select"
+                    onChange={(e: any) =>
+                      this.handleTransferAccount("to", e.target.value)}
+                  >
                     {this.props.accounts.map(account =>
-                      <option key={account.id}>
+                      <option key={account.id} value={account.id}>
                         {account.name}
                       </option>
                     )}
@@ -112,9 +145,13 @@ export class TransferGroup extends Component<
                 </td>
 
                 <td>
-                  <FormControl componentClass="select">
+                  <FormControl
+                    componentClass="select"
+                    onChange={(e: any) =>
+                      this.handleTransferAccount("from", e.target.value)}
+                  >
                     {this.props.accounts.map(account =>
-                      <option key={account.id}>
+                      <option key={account.id} value={account.id}>
                         {account.name}
                       </option>
                     )}
