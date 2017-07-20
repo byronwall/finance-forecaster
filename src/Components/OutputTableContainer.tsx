@@ -10,7 +10,7 @@ import { CombinedOutputTable } from "./CombinedOutputTable";
 
 interface OutputTableContainerProps {
   accounts: LoanAccount[];
-  handleAccountChange(obj: any, index: number, shouldRemove?: boolean): void;
+  handleAccountChange(obj: LoanAccount, shouldRemove?: boolean): void;
 }
 
 interface OutputTableContainerState {
@@ -28,37 +28,13 @@ export class OutputTableContainer extends Component<
       activeAccount: 0
     };
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleInternalChange = this.handleInternalChange.bind(this);
   }
 
-  handleChange(newActive: number) {
+  handleInternalChange(newActive: number) {
     this.setState({
       activeAccount: newActive
     });
-  }
-
-  handleNewAccount(acctType: string) {
-    // add the account
-
-    let newAccount = new LoanAccount();
-
-    const currentLength = this.props.accounts.length;
-
-    this.props.handleAccountChange(newAccount, -1);
-
-    this.setState({ activeAccount: currentLength });
-
-    // make it active
-  }
-
-  handleRemoveAccount(index: number) {
-    if (
-      this.state.activeAccount === index ||
-      this.state.activeAccount === this.props.accounts.length - 1
-    ) {
-      this.setState({ activeAccount: 0 });
-    }
-    this.props.handleAccountChange(null, index, true);
   }
 
   getAccountTable(account: LoanAccount) {
@@ -73,7 +49,6 @@ export class OutputTableContainer extends Component<
           <LoanOutputTable
             account={account as LoanAccount}
             handleAccountChange={this.props.handleAccountChange}
-            index={this.state.activeAccount}
             accounts={this.props.accounts}
           />
         );
@@ -96,10 +71,8 @@ export class OutputTableContainer extends Component<
             <AccountList
               accounts={this.props.accounts}
               activeAccount={this.state.activeAccount}
-              handleChange={this.handleChange}
-              handleNewAccount={(type: string) => this.handleNewAccount(type)}
-              handleRemoveAccount={(index: number) =>
-                this.handleRemoveAccount(index)}
+              handleChange={this.handleInternalChange}
+              handleAccountChange={this.props.handleAccountChange}
             />
           </Col>
           <Col md={9}>

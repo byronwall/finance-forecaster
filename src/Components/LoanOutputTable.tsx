@@ -9,28 +9,30 @@ import { handleInput, $N } from "../Helpers/Functions";
 
 interface LoanOutputTableProps {
   account: LoanAccount;
-  index: number;
   accounts: LoanAccount[];
-  handleAccountChange: (obj: any, index: number) => void;
+  handleAccountChange(obj: LoanAccount, shouldRemove?: boolean): void;
 }
 
 export class LoanOutputTable extends Component<LoanOutputTableProps> {
   handleAccountChange(data: any) {
-    for (let key of Object.keys(data)) {
-      this.props.account[key] = data[key];
-    }
+    // TODO: really need to add a spread in here... figure out how to not destroy the class
 
-    this.props.handleAccountChange(this.props.account, this.props.index);
+    const newAccount = new LoanAccount();
+
+    Object.assign(newAccount, this.props.account, data);
+
+    this.props.handleAccountChange(newAccount);
   }
 
   handleNewTransfer(obj: Transfer) {
     // need to add this to the object and send it up the chain
 
-    let { account } = this.props;
+    const newAccount = new LoanAccount();
+    Object.assign(newAccount, this.props.account);
 
-    account.transfers.push(obj);
+    newAccount.transfers.push(obj);
 
-    this.props.handleAccountChange(this.props.account, this.props.index);
+    this.props.handleAccountChange(this.props.account);
   }
 
   render() {

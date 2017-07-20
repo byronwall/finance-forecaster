@@ -1,3 +1,5 @@
+import { StateObj } from "../Components/App";
+
 export const enum AccountTypes {
   Cash,
   Loan
@@ -119,6 +121,13 @@ export class SampleData {
     cashAcct.transfers.push(xfer);
     loanAcct.transfers.push(xfer);
 
-    return [cashAcct, loanAcct];
+    const accounts = [cashAcct, loanAcct];
+    const transfers = [xfer];
+
+    const appState = new StateObj();
+    appState.accounts = accounts;
+    appState.transfers = transfers;
+
+    return appState;
   }
 }

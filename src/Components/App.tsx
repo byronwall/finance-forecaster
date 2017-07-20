@@ -11,35 +11,11 @@ import { Grid, Row, Col, PageHeader } from "react-bootstrap";
 import { LoanAccount, Transfer, SampleData } from "../Models/Account";
 import { OutputTableContainer } from "./OutputTableContainer";
 
-import { DataSchema } from "../Models/DataSchema";
+import { DataSchema, NormalizedEntities } from "../Models/DataSchema";
 
 export class StateObj {
   accounts: LoanAccount[] = [];
-
-  static FromJson(data: StateObj): StateObj {
-    let stateObj = new StateObj();
-
-    // handle accounts
-    data.accounts.forEach(account => {
-      let newAccount = new LoanAccount();
-      Object.assign(newAccount, account);
-
-      stateObj.accounts.push(newAccount);
-
-      let newTransfers: Transfer[] = [];
-
-      newAccount.transfers.forEach(transfer => {
-        let newTransfer = new Transfer();
-        newTransfer = Object.assign(newTransfer, transfer);
-
-        newTransfers.push(newTransfer);
-      });
-
-      newAccount.transfers = newTransfers;
-    });
-
-    return stateObj;
-  }
+  transfers: Transfer[];
 }
 
 class SavedState {
@@ -49,20 +25,31 @@ class SavedState {
   encrytedCheck: CryptoJS.WordArray | string;
 }
 
-class AppState extends StateObj {
+class AppState {
+  normalizedEntities: NormalizedEntities;
   savedObj: SavedState[];
 }
 
 export class App extends Component<{}, AppState> {
+  handleAccountChange = this._handleChangeFactory<LoanAccount>("accounts");
+
   constructor(props: {}) {
     super(props);
 
-    // TODO: move the data creation somewhere else
-
+    // loads a sample data set
     const cashLoanExampleAccts = SampleData.getTypicalExample();
 
+    const defaultAccount = new LoanAccount();
+    defaultAccount.id = -1;
+    defaultAccount.name = "*thin air*";
+
+    cashLoanExampleAccts.accounts.push(defaultAccount);
+
+    // normalize and put into the state
+    const normalizedEntities = DataSchema.normalizeData(cashLoanExampleAccts);
+
     this.state = {
-      accounts: cashLoanExampleAccts,
+      normalizedEntities,
       savedObj: this.getSavedObj()
     };
 
@@ -72,34 +59,6 @@ export class App extends Component<{}, AppState> {
 
   getSavedObj() {
     return store.get("savedState") || [];
-  }
-
-  handleAccountChange(
-    obj: LoanAccount,
-    objIndex: number,
-    shouldRemove: boolean = false
-  ) {
-    // this will be an account coming in
-
-    console.log("account change", obj, objIndex, shouldRemove);
-
-    let newAccounts: LoanAccount[] = [];
-
-    this.state.accounts.forEach((account, index) => {
-      if (objIndex === index) {
-        if (!shouldRemove) {
-          newAccounts.push(obj);
-        }
-      } else {
-        newAccounts.push(account);
-      }
-    });
-
-    if (objIndex === -1) {
-      newAccounts.push(obj);
-    }
-
-    this.setState({ accounts: newAccounts });
   }
 
   handleStoreChange(obj: any) {
@@ -193,19 +152,74 @@ export class App extends Component<{}, AppState> {
       }
 
       if (shouldLoad) {
-        stateToLoad.data = StateObj.FromJson(stateToLoad.data);
-        this.setState({ ...stateToLoad.data });
+        // TODO: resolve this error
+        //stateToLoad.data = StateObj.FromJson(stateToLoad.data);
+        // this.setState({ ...stateToLoad.data });
       }
 
       // push that data into the current state
     }
   }
 
+  _handleChangeFactory<T extends HasId>(arrayName: string) {
+    // this is a generic factory for handling top level changes
+    // this is not a very elegant approach since it denorms the normalized data
+    return (newObj: T, shouldRemove = false) => {
+      // take the new object and overwrite the previous one
+      console.log("newObj for change", newObj);
+
+      // push this into the entities and renormalize the data
+      const newEntities = { ...this.state.normalizedEntities };
+      const newGroup: { [id: number]: T } = {};
+
+      let wasFound = false;
+
+      Object.keys(newEntities[arrayName]).forEach(key => {
+        const testItem = newEntities[arrayName][key];
+
+        // add new one or existing
+        if (testItem.id === newObj.id) {
+          wasFound = true;
+          if (!shouldRemove) {
+            newGroup[testItem.id] = newObj;
+          }
+        } else {
+          newGroup[testItem.id] = testItem;
+        }
+      });
+
+      // this will trigger if the key checking above did not find the current item
+      if (!wasFound) {
+        newGroup[newObj.id] = newObj;
+      }
+
+      newEntities[arrayName] = newGroup;
+
+      // denorm the data to regenerate that table
+      this.handleDataUpdate(newEntities);
+    };
+  }
+
+  handleDataUpdate(almostNormEntities: NormalizedEntities) {
+    // this will denormalize and normalize again to kill the referneces
+
+    const denormData = DataSchema.denormalizeState(almostNormEntities);
+    const normalizedEntities = DataSchema.normalizeData(denormData);
+
+    this.setState({ normalizedEntities });
+  }
+
   render() {
     // test the normalization
 
-    const normData = DataSchema.normalizeData(this.state.accounts);
-    console.log("normData", normData);
+    // process the data to denormalize into useful objects
+    let accounts: LoanAccount[] = [];
+
+    const normEntities = this.state.normalizedEntities;
+
+    if (this.state.normalizedEntities !== undefined) {
+      accounts = DataSchema.denormalizeState(normEntities).accounts;
+    }
 
     return (
       <div>
@@ -224,7 +238,7 @@ export class App extends Component<{}, AppState> {
           <Row>
             <Col md={12}>
               <OutputTableContainer
-                accounts={this.state.accounts}
+                accounts={accounts}
                 handleAccountChange={this.handleAccountChange}
               />
             </Col>
@@ -233,4 +247,8 @@ export class App extends Component<{}, AppState> {
       </div>
     );
   }
+}
+
+interface HasId {
+  id: number;
 }

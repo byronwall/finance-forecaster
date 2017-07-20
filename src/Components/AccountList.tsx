@@ -13,29 +13,34 @@ import {
 interface OutputTableHeaderProps {
   accounts: LoanAccount[];
   activeAccount: number;
-  handleChange: (newAcive: number) => void;
-  handleNewAccount: (type: string) => void;
-  handleRemoveAccount: (index: number) => void;
+  handleChange(newAcive: number): void;
+  handleAccountChange(obj: LoanAccount, shouldRemove?: boolean): void;
 }
 
 export class AccountList extends Component<OutputTableHeaderProps> {
   render() {
+    const accounts = this.props.accounts.filter(account => account.id >= 0);
+
     return (
       <div>
         <h2>accounts</h2>
         <div>
           <ButtonGroup>
-            <Button onClick={() => this.props.handleNewAccount("cash")}>
+            <Button
+              onClick={() => this.props.handleAccountChange(new LoanAccount())}
+            >
               <Glyphicon glyph="plus" /> {"cash"}
             </Button>
-            <Button onClick={() => this.props.handleNewAccount("loan")}>
+            <Button
+              onClick={() => this.props.handleAccountChange(new LoanAccount())}
+            >
               <Glyphicon glyph="plus" /> {"loan"}
             </Button>
           </ButtonGroup>
         </div>
 
         <ListGroup>
-          {this.props.accounts.map((account, index) =>
+          {accounts.map((account, index) =>
             <ListGroupItem
               key={index}
               active={index === this.props.activeAccount}
@@ -45,7 +50,7 @@ export class AccountList extends Component<OutputTableHeaderProps> {
 
               <Button
                 onClick={e => {
-                  this.props.handleRemoveAccount(index);
+                  this.props.handleAccountChange(account, true);
                   e.stopPropagation();
                 }}
                 bsSize="sm"

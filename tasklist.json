@@ -70,7 +70,7 @@
       "sortOrder": 0,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
@@ -106,7 +106,7 @@
       "sortOrder": 1,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
@@ -124,7 +124,7 @@
       "sortOrder": 2,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
@@ -142,7 +142,7 @@
       "sortOrder": 3,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },

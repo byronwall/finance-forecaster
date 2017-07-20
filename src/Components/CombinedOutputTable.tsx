@@ -19,7 +19,9 @@ export class CombinedOutputTable extends Component<CombinedOutputTableProps> {
     let cashFlows: LoanCashFlow[][] = [];
 
     this.props.accounts.forEach(account => {
-      cashFlows.push(account.getCashFlows(24));
+      if (account.id > -1) {
+        cashFlows.push(account.getCashFlows(24));
+      }
     });
 
     // combine the cash flows
