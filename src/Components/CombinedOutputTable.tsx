@@ -6,6 +6,7 @@ import { LoanAccount, LoanCashFlow } from "../Models/Account";
 
 import {} from "./TransferGroup";
 import {} from "../Helpers/Functions";
+import { Chart } from "./Chart";
 
 interface CombinedOutputTableProps {
   accounts: LoanAccount[];
@@ -40,6 +41,7 @@ export class CombinedOutputTable extends Component<CombinedOutputTableProps> {
     return (
       <div>
         <h3>combined table</h3>
+        <Chart data={combinedCashFlow} />
         <Table striped={true} bordered={true} hover={true}>
           <thead>
             <tr>

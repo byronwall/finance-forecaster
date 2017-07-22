@@ -3,13 +3,15 @@ import { Component } from "react";
 import { Panel, Col } from "react-bootstrap";
 import { AccountList } from "./AccountList";
 
-import { LoanAccount, AccountTypes } from "../Models/Account";
+import { LoanAccount, AccountTypes, Transfer } from "../Models/Account";
 
 import { LoanOutputTable } from "./LoanOutputTable";
 import { CombinedOutputTable } from "./CombinedOutputTable";
+import {} from "./TransferGroup";
 
 interface OutputTableContainerProps {
   accounts: LoanAccount[];
+  transfers: Transfer[];
   handleAccountChange(obj: LoanAccount, shouldRemove?: boolean): void;
 }
 
@@ -25,21 +27,42 @@ export class OutputTableContainer extends Component<
     super(props);
 
     this.state = {
-      activeAccount: 0
+      activeAccount: -1
     };
 
     this.handleInternalChange = this.handleInternalChange.bind(this);
   }
 
   handleInternalChange(newActive: number) {
+    console.log("new active", newActive);
     this.setState({
       activeAccount: newActive
     });
   }
 
+  componentWillUpdate() {
+    let wasFound = false;
+    let maxId = -1;
+    this.props.accounts.forEach(account => {
+      if (account.id === this.state.activeAccount) {
+        wasFound = true;
+      } else {
+        maxId = account.id;
+      }
+    });
+
+    if (!wasFound) {
+      this.setState({ activeAccount: maxId });
+    }
+  }
+
   getAccountTable(account: LoanAccount) {
     if (this.state.activeAccount === -1) {
       return <CombinedOutputTable accounts={this.props.accounts} />;
+    }
+
+    if (account === undefined) {
+      return <div />;
     }
 
     switch (account.type) {
@@ -59,8 +82,10 @@ export class OutputTableContainer extends Component<
 
   render() {
     let activeAccount = this.props.accounts.find(
-      (account, index) => index === this.state.activeAccount
+      account => account.id === this.state.activeAccount
     )!;
+
+    const accountTable = this.getAccountTable(activeAccount);
 
     console.log("active account", activeAccount);
 
@@ -76,7 +101,7 @@ export class OutputTableContainer extends Component<
             />
           </Col>
           <Col md={9}>
-            {this.getAccountTable(activeAccount)}
+            {accountTable}
           </Col>
         </Panel>
       </div>

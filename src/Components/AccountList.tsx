@@ -13,7 +13,7 @@ import {
 interface OutputTableHeaderProps {
   accounts: LoanAccount[];
   activeAccount: number;
-  handleChange(newAcive: number): void;
+  handleChange(newActive: number): void;
   handleAccountChange(obj: LoanAccount, shouldRemove?: boolean): void;
 }
 
@@ -29,22 +29,17 @@ export class AccountList extends Component<OutputTableHeaderProps> {
             <Button
               onClick={() => this.props.handleAccountChange(new LoanAccount())}
             >
-              <Glyphicon glyph="plus" /> {"cash"}
-            </Button>
-            <Button
-              onClick={() => this.props.handleAccountChange(new LoanAccount())}
-            >
-              <Glyphicon glyph="plus" /> {"loan"}
+              <Glyphicon glyph="plus" /> {"account"}
             </Button>
           </ButtonGroup>
         </div>
 
         <ListGroup>
-          {accounts.map((account, index) =>
+          {accounts.map(account =>
             <ListGroupItem
-              key={index}
-              active={index === this.props.activeAccount}
-              onClick={() => this.props.handleChange(index)}
+              key={account.id}
+              active={account.id === this.props.activeAccount}
+              onClick={() => this.props.handleChange(account.id)}
             >
               {account.name}
 

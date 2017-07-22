@@ -101,10 +101,16 @@ export class App extends Component<{}, AppState> {
   render() {
     // process the data to denormalize into useful objects
     let accounts: LoanAccount[] = [];
+    let transfers: Transfer[] = [];
+
     const normEntities = this.state.normalizedEntities;
     if (normEntities !== undefined) {
-      accounts = DataSchema.denormalizeState(normEntities).accounts;
+      const denormState = DataSchema.denormalizeState(normEntities);
+      accounts = denormState.accounts;
+      transfers = denormState.transfers;
     }
+
+    console.log("accounts", accounts);
 
     return (
       <div>
@@ -124,6 +130,7 @@ export class App extends Component<{}, AppState> {
             <Col md={12}>
               <OutputTableContainer
                 accounts={accounts}
+                transfers={transfers}
                 handleAccountChange={this.handleAccountChange}
               />
             </Col>

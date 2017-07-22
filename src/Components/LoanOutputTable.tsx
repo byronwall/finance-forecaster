@@ -6,6 +6,7 @@ import { Transfer, LoanAccount } from "../Models/Account";
 
 import { TransferGroup } from "./TransferGroup";
 import { handleInput, $N } from "../Helpers/Functions";
+import { Chart } from "./Chart";
 
 interface LoanOutputTableProps {
   account: LoanAccount;
@@ -60,6 +61,9 @@ export class LoanOutputTable extends Component<LoanOutputTableProps> {
         <h2>account details</h2>
 
         <h3>settings</h3>
+        <p>
+          {"id = " + this.props.account.id}
+        </p>
         <form>
           <Table>
             <thead>
@@ -127,6 +131,8 @@ export class LoanOutputTable extends Component<LoanOutputTableProps> {
             )}
           </tbody>
         </Table>
+
+        <Chart data={amounts} />
       </div>
     );
   }

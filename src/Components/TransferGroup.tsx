@@ -77,6 +77,17 @@ export class TransferGroup extends Component<
 
     let columns = ["amount", "frequency", "start", "end"];
 
+    const accounts = this.props.accounts.sort((a, b) => a.id - b.id);
+    const toAccount =
+      this.state.newTransfer.toAccount !== undefined
+        ? this.state.newTransfer.toAccount.id
+        : -1;
+
+    const fromAccount =
+      this.state.newTransfer.fromAccount !== undefined
+        ? this.state.newTransfer.fromAccount.id
+        : -1;
+
     return (
       <div>
         <h3>transfers</h3>
@@ -130,10 +141,11 @@ export class TransferGroup extends Component<
                 <td>
                   <FormControl
                     componentClass="select"
+                    value={toAccount}
                     onChange={(e: any) =>
-                      this.handleTransferAccount("to", e.target.value)}
+                      this.handleTransferAccount("to", +e.target.value)}
                   >
-                    {this.props.accounts.map(account =>
+                    {accounts.map(account =>
                       <option key={account.id} value={account.id}>
                         {account.name}
                       </option>
@@ -144,10 +156,11 @@ export class TransferGroup extends Component<
                 <td>
                   <FormControl
                     componentClass="select"
+                    value={fromAccount}
                     onChange={(e: any) =>
-                      this.handleTransferAccount("from", e.target.value)}
+                      this.handleTransferAccount("from", +e.target.value)}
                   >
-                    {this.props.accounts.map(account =>
+                    {accounts.map(account =>
                       <option key={account.id} value={account.id}>
                         {account.name}
                       </option>
