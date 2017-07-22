@@ -21,9 +21,11 @@
         155,
         157,
         159,
-        161
+        161,
+        163,
+        165
       ],
-      "sortOrder": 9007199254740991,
+      "sortOrder": 0,
       "status": null,
       "milestone": null,
       "isComplete": false,
@@ -49,7 +51,7 @@
         135,
         136
       ],
-      "sortOrder": 9007199254740991,
+      "sortOrder": 1,
       "status": null,
       "milestone": null,
       "isComplete": false,
@@ -178,7 +180,7 @@
       "sortOrder": 2,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
@@ -196,7 +198,7 @@
       "sortOrder": 3,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
@@ -268,7 +270,7 @@
       "sortOrder": 5,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
@@ -305,10 +307,10 @@
         147,
         153
       ],
-      "sortOrder": 9007199254740991,
+      "sortOrder": 2,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": true,
       "tags": []
     },
@@ -332,7 +334,7 @@
       "sortOrder": 0,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
@@ -350,7 +352,7 @@
       "sortOrder": 0,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
@@ -368,7 +370,7 @@
       "sortOrder": 1,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
@@ -386,7 +388,7 @@
       "sortOrder": 2,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
@@ -404,7 +406,7 @@
       "sortOrder": 3,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
@@ -422,7 +424,7 @@
       "sortOrder": 4,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
@@ -444,7 +446,7 @@
       "sortOrder": 1,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
@@ -462,7 +464,7 @@
       "sortOrder": 0,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
@@ -480,7 +482,7 @@
       "sortOrder": 1,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
@@ -498,7 +500,7 @@
       "sortOrder": 2,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
@@ -516,14 +518,14 @@
       "sortOrder": 2,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
     {
       "ID": 155,
       "description": "Add some typical scenarios to the examples (not saved, hard-coded)",
-      "comments": "",
+      "comments": "Improve these with some credit card and other debt scenarios",
       "priority": "",
       "duration": 0,
       "startDate": null,
@@ -552,7 +554,7 @@
       "sortOrder": 7,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
@@ -586,6 +588,42 @@
       "parentTask": 111,
       "childTasks": [],
       "sortOrder": 9,
+      "status": null,
+      "milestone": null,
+      "isComplete": true,
+      "isProjectRoot": false,
+      "tags": []
+    },
+    {
+      "ID": 163,
+      "description": "Update transfers so that they live outside of the accounts for creation",
+      "comments": "Or at least put them outside of the object when adding and editing so that the references are recreated correctly outside.",
+      "priority": "",
+      "duration": 0,
+      "startDate": null,
+      "endDate": null,
+      "dateAdded": "7/21/2017, 10:24:52 PM",
+      "parentTask": 111,
+      "childTasks": [],
+      "sortOrder": 10,
+      "status": null,
+      "milestone": null,
+      "isComplete": false,
+      "isProjectRoot": false,
+      "tags": []
+    },
+    {
+      "ID": 165,
+      "description": "Add some measure of overall wealth to the combined table (IRR, PV, etc.) to compare cases",
+      "comments": "",
+      "priority": "",
+      "duration": 0,
+      "startDate": null,
+      "endDate": null,
+      "dateAdded": "7/21/2017, 10:26:32 PM",
+      "parentTask": 111,
+      "childTasks": [],
+      "sortOrder": 11,
       "status": null,
       "milestone": null,
       "isComplete": false,
