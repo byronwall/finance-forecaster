@@ -4,8 +4,10 @@ import { Table, FormControl, Button, Glyphicon } from "react-bootstrap";
 
 import { Transfer, LoanAccount } from "../Models/Account";
 import { $N, handleInput } from "../Helpers/Functions";
+import { ClickEditable } from "./ClickEditable";
 
 interface TransferGroupProps {
+  account?: LoanAccount;
   transfers: Transfer[];
   accounts: LoanAccount[];
   handleNewTransfer: (obj: Transfer) => void;
@@ -22,9 +24,20 @@ export class TransferGroup extends Component<
   constructor(props: TransferGroupProps) {
     super(props);
 
+    // get a fresh blank transfer
+    const xfer = this._getNewXfer();
+
     this.state = {
-      newTransfer: new Transfer()
+      newTransfer: xfer
     };
+  }
+
+  _getNewXfer() {
+    const xfer = new Transfer();
+    xfer.toAccount = this.props.accounts.find(account => account.id === -1)!;
+    xfer.fromAccount = xfer.toAccount;
+
+    return xfer;
   }
 
   handleNewTransferEdit(data: any) {
@@ -38,9 +51,21 @@ export class TransferGroup extends Component<
     let newState = new Transfer();
     newState = { ...newState, ...this.state.newTransfer };
 
-    this.props.handleNewTransfer(newState);
+    // do a check here to see if the accounts have at least one for the associated one
+    let isValid = true;
+    if (this.props.account !== undefined) {
+      isValid =
+        this.props.account.id === newState.fromAccount.id ||
+        this.props.account.id === newState.toAccount.id;
+    }
 
-    this.setState({ newTransfer: new Transfer() });
+    if (isValid) {
+      this.props.handleNewTransfer(newState);
+
+      this.setState({ newTransfer: this._getNewXfer() });
+    } else {
+      alert("one side of the xfer must include current account");
+    }
   }
 
   handleTransferAccount(direction: "to" | "from", id: number) {
@@ -57,17 +82,6 @@ export class TransferGroup extends Component<
     } else if (direction === "from") {
       newState.fromAccount = matchingAccount;
     }
-
-    console.log(
-      "new xfer obj",
-      newState,
-      "accounts",
-      this.props.accounts,
-      "id",
-      id,
-      "match",
-      matchingAccount
-    );
 
     this.setState({ newTransfer: newState });
   }
@@ -111,7 +125,10 @@ export class TransferGroup extends Component<
                 <tr key={index1}>
                   {columns.map((column, index2) =>
                     <td key={index2}>
-                      {transfer[column]}
+                      <ClickEditable
+                        value={transfer[column]}
+                        handleValueChange={value => alert(value)}
+                      />
                     </td>
                   )}
 

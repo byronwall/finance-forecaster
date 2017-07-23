@@ -100,6 +100,7 @@ export class LoanOutputTable extends Component<LoanOutputTableProps> {
           transfers={this.props.account.transfers}
           handleNewTransfer={(obj: Transfer) => this.handleNewTransfer(obj)}
           accounts={this.props.accounts}
+          account={this.props.account}
         />
 
         <h3>output table</h3>
