@@ -48,8 +48,7 @@
         126,
         127,
         129,
-        135,
-        136
+        135
       ],
       "sortOrder": 1,
       "status": null,
@@ -252,7 +251,7 @@
       "sortOrder": 5,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
@@ -271,24 +270,6 @@
       "status": null,
       "milestone": null,
       "isComplete": true,
-      "isProjectRoot": false,
-      "tags": []
-    },
-    {
-      "ID": 136,
-      "description": "Possibly implement Redux to get comfortable with that",
-      "comments": "",
-      "priority": "",
-      "duration": 0,
-      "startDate": null,
-      "endDate": null,
-      "dateAdded": "2017-07-04T21:32:23.264Z",
-      "parentTask": 113,
-      "childTasks": [],
-      "sortOrder": 6,
-      "status": null,
-      "milestone": null,
-      "isComplete": false,
       "isProjectRoot": false,
       "tags": []
     },
@@ -608,7 +589,7 @@
       "sortOrder": 10,
       "status": null,
       "milestone": null,
-      "isComplete": false,
+      "isComplete": true,
       "isProjectRoot": false,
       "tags": []
     },
