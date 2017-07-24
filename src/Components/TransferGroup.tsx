@@ -10,7 +10,8 @@ interface TransferGroupProps {
   account?: LoanAccount;
   transfers: Transfer[];
   accounts: LoanAccount[];
-  handleNewTransfer: (obj: Transfer) => void;
+  handleNewTransfer(obj: Transfer): void;
+  handleExistingTransferEdit(obj: Transfer): void;
 }
 
 interface TransferGroupState {
@@ -45,6 +46,16 @@ export class TransferGroup extends Component<
     newState = { ...newState, ...this.state.newTransfer, ...data };
 
     this.setState({ newTransfer: newState });
+  }
+
+  handleExistingTransferEdit(
+    transfer: Transfer,
+    newXFerData: Partial<Transfer>
+  ) {
+    const newTransfer = new Transfer();
+    Object.assign(newTransfer, transfer, newXFerData);
+
+    this.props.handleExistingTransferEdit(newTransfer);
   }
 
   handleNewTransfer() {
@@ -126,8 +137,11 @@ export class TransferGroup extends Component<
                   {columns.map((column, index2) =>
                     <td key={index2}>
                       <ClickEditable
-                        value={transfer[column]}
-                        handleValueChange={value => alert(value)}
+                        value={transfer[column] || ""}
+                        handleValueChange={value =>
+                          this.handleExistingTransferEdit(transfer, {
+                            [column]: value
+                          })}
                       />
                     </td>
                   )}

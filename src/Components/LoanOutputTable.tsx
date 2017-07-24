@@ -25,6 +25,29 @@ export class LoanOutputTable extends Component<LoanOutputTableProps> {
     this.props.handleAccountChange(newAccount);
   }
 
+  handleTransferChange(obj: Transfer) {
+    // this will get fired when the transfer ClickEditable is done editing
+
+    // determine which transfer is changing, update that one attached to the current account
+
+    // copy the current account
+    const newAccount = new LoanAccount();
+    Object.assign(newAccount, this.props.account);
+
+    // iterate the transfers to find this one
+    newAccount.transfers.forEach((transfer, index) => {
+      if (transfer.id === obj.id) {
+        newAccount.transfers[index] = obj;
+      } else {
+        // no change
+      }
+    });
+
+    this.props.handleAccountChange(newAccount);
+
+    // copy over the trasnfers except for the one that changed
+  }
+
   handleNewTransfer(obj: Transfer) {
     // need to add this to the object and send it up the chain
 
@@ -101,6 +124,7 @@ export class LoanOutputTable extends Component<LoanOutputTableProps> {
           handleNewTransfer={(obj: Transfer) => this.handleNewTransfer(obj)}
           accounts={this.props.accounts}
           account={this.props.account}
+          handleExistingTransferEdit={xfer => this.handleTransferChange(xfer)}
         />
 
         <h3>output table</h3>
