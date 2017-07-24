@@ -12,6 +12,7 @@ interface LoanOutputTableProps {
   account: LoanAccount;
   accounts: LoanAccount[];
   handleAccountChange(obj: LoanAccount, shouldRemove?: boolean): void;
+  handleTransferChange(obj: Transfer, shouldRemove?: boolean): void;
 }
 
 export class LoanOutputTable extends Component<LoanOutputTableProps> {
@@ -84,9 +85,6 @@ export class LoanOutputTable extends Component<LoanOutputTableProps> {
         <h2>account details</h2>
 
         <h3>settings</h3>
-        <p>
-          {"id = " + this.props.account.id}
-        </p>
         <form>
           <Table>
             <thead>
@@ -121,10 +119,11 @@ export class LoanOutputTable extends Component<LoanOutputTableProps> {
 
         <TransferGroup
           transfers={this.props.account.transfers}
-          handleNewTransfer={(obj: Transfer) => this.handleNewTransfer(obj)}
+          handleNewTransfer={xfer => this.props.handleTransferChange(xfer)}
           accounts={this.props.accounts}
           account={this.props.account}
-          handleExistingTransferEdit={xfer => this.handleTransferChange(xfer)}
+          handleExistingTransferEdit={(xfer, shouldRemove) =>
+            this.props.handleTransferChange(xfer, shouldRemove)}
         />
 
         <h3>output table</h3>

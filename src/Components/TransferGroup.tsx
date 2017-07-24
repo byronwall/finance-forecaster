@@ -11,7 +11,7 @@ interface TransferGroupProps {
   transfers: Transfer[];
   accounts: LoanAccount[];
   handleNewTransfer(obj: Transfer): void;
-  handleExistingTransferEdit(obj: Transfer): void;
+  handleExistingTransferEdit(obj: Transfer, shouldRemove?: boolean): void;
 }
 
 interface TransferGroupState {
@@ -137,7 +137,7 @@ export class TransferGroup extends Component<
                   {columns.map((column, index2) =>
                     <td key={index2}>
                       <ClickEditable
-                        value={transfer[column] || ""}
+                        value={transfer[column] || "\u00a0"}
                         handleValueChange={value =>
                           this.handleExistingTransferEdit(transfer, {
                             [column]: value
@@ -151,6 +151,16 @@ export class TransferGroup extends Component<
                   </td>
                   <td>
                     {transfer.fromAccount.name}
+                  </td>
+                  <td>
+                    <Button
+                      bsSize="small"
+                      bsStyle="danger"
+                      onClick={() =>
+                        this.props.handleExistingTransferEdit(transfer, true)}
+                    >
+                      <Glyphicon glyph="remove" />
+                    </Button>
                   </td>
                 </tr>
               )}

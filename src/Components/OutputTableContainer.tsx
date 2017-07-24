@@ -13,6 +13,7 @@ interface OutputTableContainerProps {
   accounts: LoanAccount[];
   transfers: Transfer[];
   handleAccountChange(obj: LoanAccount, shouldRemove?: boolean): void;
+  handleTransferChange(obj: Transfer, shouldRemove?: boolean): void;
 }
 
 interface OutputTableContainerState {
@@ -72,6 +73,7 @@ export class OutputTableContainer extends Component<
           <LoanOutputTable
             account={account as LoanAccount}
             handleAccountChange={this.props.handleAccountChange}
+            handleTransferChange={this.props.handleTransferChange}
             accounts={this.props.accounts}
           />
         );

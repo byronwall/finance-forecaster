@@ -119,14 +119,14 @@ export class SampleData {
     xfer.fromAccount = cashAcct;
 
     cashAcct.transfers.push(xfer);
-    loanAcct.transfers.push(xfer);
+    //loanAcct.transfers.push(xfer);
 
     const accounts = [cashAcct, loanAcct];
     const transfers = [xfer];
 
     const appState = new StateObj();
     appState.accounts = accounts;
-    appState.transfers = transfers;
+    appState.xfers = transfers;
 
     return appState;
   }

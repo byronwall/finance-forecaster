@@ -13,7 +13,7 @@ import { DataSchema, NormalizedEntities } from "../Models/DataSchema";
 
 export class StateObj {
   accounts: LoanAccount[] = [];
-  transfers: Transfer[];
+  xfers: Transfer[];
 }
 
 class AppState {
@@ -22,6 +22,7 @@ class AppState {
 
 export class App extends Component<{}, AppState> {
   handleAccountChange = this._handleChangeFactory<LoanAccount>("accounts");
+  handleTransferChange = this._handleChangeFactory<Transfer>("xfers");
 
   constructor(props: {}) {
     super(props);
@@ -43,6 +44,7 @@ export class App extends Component<{}, AppState> {
     };
 
     this.handleAccountChange = this.handleAccountChange.bind(this);
+    this.handleTransferChange = this.handleTransferChange.bind(this);
     this.handleLoadingStoredState = this.handleLoadingStoredState.bind(this);
   }
 
@@ -62,6 +64,8 @@ export class App extends Component<{}, AppState> {
       const newGroup: { [id: number]: T } = {};
 
       let wasFound = false;
+
+      console.log("newEntities", newEntities);
 
       Object.keys(newEntities[arrayName]).forEach(key => {
         const testItem = newEntities[arrayName][key];
@@ -83,6 +87,8 @@ export class App extends Component<{}, AppState> {
       }
 
       newEntities[arrayName] = newGroup;
+
+      console.log("final group", newGroup);
 
       // denorm the data to regenerate that table
       this.handleDataUpdate(newEntities);
@@ -107,7 +113,7 @@ export class App extends Component<{}, AppState> {
     if (normEntities !== undefined) {
       const denormState = DataSchema.denormalizeState(normEntities);
       accounts = denormState.accounts;
-      transfers = denormState.transfers;
+      transfers = denormState.xfers;
     }
 
     console.log("accounts", accounts);
@@ -132,6 +138,7 @@ export class App extends Component<{}, AppState> {
                 accounts={accounts}
                 transfers={transfers}
                 handleAccountChange={this.handleAccountChange}
+                handleTransferChange={this.handleTransferChange}
               />
             </Col>
           </Row>

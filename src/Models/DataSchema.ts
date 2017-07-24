@@ -2,30 +2,62 @@ import { normalize, schema, denormalize } from "normalizr";
 import { Transfer, LoanAccount } from "./Account";
 import { StateObj } from "../Components/App";
 
+import * as _ from "lodash";
+
 const transferSchema = new schema.Entity(
-  "transfers",
+  "xfers",
   {},
   {
     processStrategy: (value: Transfer, parent, key) => {
       // this strategy will break the recursion
       // this is required because there is a circular reference between accounts/xfers
+      console.log("process xfer", value, parent, key);
+
+      switch (key) {
+        case "transfers":
+          return {
+            ...value,
+            toAccount: value.toAccount !== undefined ? value.toAccount.id : -1,
+            fromAccount:
+              value.fromAccount !== undefined ? value.fromAccount.id : -1
+          };
+        default:
+          return { ...value };
+      }
+    }
+  }
+);
+const accountSchema = new schema.Entity(
+  "accounts",
+  {
+    transfers: [transferSchema]
+  },
+  {
+    processStrategy: (value, parent, key) => {
+      console.log("process acct", value, parent, key);
+      switch (key) {
+        case "toAccount":
+        case "fromAccount":
+          return { ...value, transfers: [parent.id] };
+        default:
+          return { ...value };
+      }
+    },
+    mergeStrategy: (itemA, itemB) => {
+      console.log("merge acct", itemA, itemB);
+
       return {
-        ...value,
-        toAccount:
-          value.toAccount !== undefined ? value.toAccount.id : -1,
-        fromAccount:
-          value.fromAccount !== undefined ? value.fromAccount.id : -1
+        ...itemA,
+        ...itemB,
+        transfers: _.uniq([...itemA.transfers, ...itemB.transfers])
       };
     }
   }
 );
-const accountSchema = new schema.Entity("accounts", {
-  transfers: [transferSchema]
-});
 
 const AppStateSchema = {
-  accounts: [accountSchema],
-  transfers: [transferSchema]
+  xfers: [transferSchema],
+  accounts: [accountSchema]
 };
 
 transferSchema.define({
@@ -45,11 +77,17 @@ export class DataSchema {
   }
 
   static denormalizeState(normEntities: NormalizedEntities) {
-    const accounts = Object.keys(normEntities.accounts);
-    const transfers = Object.keys(normEntities.transfers);
+    console.log("norm state incoming", normEntities);
+
+    const accounts =
+      normEntities.accounts !== undefined
+        ? Object.keys(normEntities.accounts)
+        : [];
+    const xfers =
+      normEntities.xfers !== undefined ? Object.keys(normEntities.xfers) : [];
 
     const appStateDenorm = denormalize(
-      { accounts, transfers },
+      { accounts, xfers },
       AppStateSchema,
       normEntities
     ) as StateObj;
@@ -60,6 +98,9 @@ export class DataSchema {
         account,
         LoanAccount.prototype
       );
+
+      // remove undefined transfers that might linger past an update
+      account.transfers = account.transfers.filter(xfer => xfer !== undefined);
     });
 
     console.log("denorm app state", appStateDenorm);
@@ -70,5 +111,5 @@ export class DataSchema {
 
 export interface NormalizedEntities {
   accounts: { [id: number]: LoanAccount };
-  transfers: { [id: number]: Transfer };
+  xfers: { [id: number]: Transfer };
 }
