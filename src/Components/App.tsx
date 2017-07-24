@@ -67,19 +67,23 @@ export class App extends Component<{}, AppState> {
 
       console.log("newEntities", newEntities);
 
-      Object.keys(newEntities[arrayName]).forEach(key => {
-        const testItem = newEntities[arrayName][key];
+      // check if array needs to be create first
 
-        // add new one or existing
-        if (testItem.id === newObj.id) {
-          wasFound = true;
-          if (!shouldRemove) {
-            newGroup[testItem.id] = newObj;
+      if (newEntities[arrayName] !== undefined) {
+        Object.keys(newEntities[arrayName]).forEach(key => {
+          const testItem = newEntities[arrayName][key];
+
+          // add new one or existing
+          if (testItem.id === newObj.id) {
+            wasFound = true;
+            if (!shouldRemove) {
+              newGroup[testItem.id] = newObj;
+            }
+          } else {
+            newGroup[testItem.id] = testItem;
           }
-        } else {
-          newGroup[testItem.id] = testItem;
-        }
-      });
+        });
+      }
 
       // this will trigger if the key checking above did not find the current item
       if (!wasFound) {
