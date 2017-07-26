@@ -137,8 +137,8 @@ export class TransferGroup extends Component<
                   {columns.map((column, index2) =>
                     <td key={index2}>
                       <ClickEditable
-                        value={transfer[column] || "\u00a0"}
-                        handleValueChange={value =>
+                        value={$N(transfer[column], "\u00a0")}
+                        handleNumericChange={value =>
                           this.handleExistingTransferEdit(transfer, {
                             [column]: value
                           })}

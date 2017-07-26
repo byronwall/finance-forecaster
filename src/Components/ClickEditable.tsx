@@ -4,7 +4,8 @@ import { FormControl } from "react-bootstrap";
 
 interface ClickEditableProps {
   value: string;
-  handleValueChange(newValue: string): void;
+  handleValueChange?(newValue: string): void;
+  handleNumericChange?(newNumber: number): void;
 }
 
 interface ClickEditableState {
@@ -26,7 +27,11 @@ export class ClickEditable extends Component<
   }
 
   handleEditChange(value: string) {
-    this.setState({ newValue: value });
+    value = value.replace("\u00a0", "");
+
+    this.setState({
+      newValue: value
+    });
   }
 
   handleEdit() {
@@ -34,7 +39,17 @@ export class ClickEditable extends Component<
   }
 
   handleSave() {
-    this.props.handleValueChange(this.state.newValue);
+    if (this.props.handleValueChange !== undefined) {
+      this.props.handleValueChange(this.state.newValue);
+    }
+    if (this.props.handleNumericChange !== undefined) {
+      const trimVal = this.state.newValue.trim();
+
+      const newNumber = trimVal === "" ? 0 : Number.parseFloat(trimVal);
+
+      this.props.handleNumericChange(newNumber);
+    }
+
     this.setState({ isEditing: false });
   }
 
@@ -61,6 +76,8 @@ export class ClickEditable extends Component<
   }
 
   render() {
+    const value = this.state.newValue;
+
     const viewBlock = (
       <div onClick={() => this.handleEdit()}>
         {this.props.value}
@@ -71,7 +88,7 @@ export class ClickEditable extends Component<
       <FormControl
         autoFocus={true}
         type="text"
-        value={this.state.newValue}
+        value={value}
         onChange={(e: any) => this.handleEditChange(e.target.value)}
         onKeyDown={(e: any) => this.handleKeyDown(e)}
         onBlur={() => this.handleCancel()}

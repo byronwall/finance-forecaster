@@ -15,7 +15,24 @@ interface LoanOutputTableProps {
   handleTransferChange(obj: Transfer, shouldRemove?: boolean): void;
 }
 
-export class LoanOutputTable extends Component<LoanOutputTableProps> {
+interface LoanOutputTableState {
+  monthsToDisplay: number;
+  rollUpFreq: number;
+}
+
+export class LoanOutputTable extends Component<
+  LoanOutputTableProps,
+  LoanOutputTableState
+> {
+  constructor(props: LoanOutputTableProps) {
+    super(props);
+
+    this.state = {
+      monthsToDisplay: 24,
+      rollUpFreq: 1
+    };
+  }
+
   handleAccountChange(data: any) {
     // TODO: really need to add a spread in here... figure out how to not destroy the class
 
@@ -60,8 +77,19 @@ export class LoanOutputTable extends Component<LoanOutputTableProps> {
     this.props.handleAccountChange(this.props.account);
   }
 
+  handleDisplayChange(months: number) {
+    this.setState({ monthsToDisplay: months });
+  }
+
+  handleRollUpChange(rollUpFreq: number) {
+    this.setState({ rollUpFreq });
+  }
+
   render() {
-    let amounts = this.props.account.getCashFlows(24);
+    let amounts = this.props.account.getCashFlows(
+      this.state.monthsToDisplay,
+      this.state.rollUpFreq
+    );
 
     console.log("amounts", amounts);
 
@@ -127,6 +155,20 @@ export class LoanOutputTable extends Component<LoanOutputTableProps> {
         />
 
         <h3>output table</h3>
+
+        <div>
+          <FormControl
+            type="text"
+            value={this.state.monthsToDisplay}
+            onChange={(e: any) => this.handleDisplayChange(e.target.value)}
+          />
+          <FormControl
+            type="text"
+            value={this.state.rollUpFreq}
+            onChange={(e: any) => this.handleRollUpChange(e.target.value)}
+          />
+        </div>
+
         <Table striped={true} bordered={true} hover={true}>
           <thead>
             <tr>

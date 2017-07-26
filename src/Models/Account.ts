@@ -24,48 +24,66 @@ export class LoanAccount {
     this.id = ++LoanAccount._id;
   }
 
-  getCashFlows(months: number) {
+  getCashFlows(rollUpPeriods: number, rollUpFreq: number = 1) {
     let cashFlowsOut = [];
     let prevBalance = this.startingBalance;
 
     let monthRate = (this.annualRate || 0) / 100 / 12;
 
-    for (let month = 0; month < months; month++) {
-      let monthPayments = 0;
-      let curBalance = 0;
-      let interest = 0;
+    // calculate the monthly amounts
+    for (let rollUpPeriod = 0; rollUpPeriod < rollUpPeriods; rollUpPeriod++) {
+      let rollupPayments = 0;
+      let rollupInterest = 0;
 
-      if ((this.start || 0) <= month) {
-        this.transfers.forEach(transfer => {
-          if (
-            (transfer.start <= month &&
-              (month - transfer.start) % transfer.frequency === 0) ||
-            (transfer.frequency === 0 && transfer.start === month)
-          ) {
-            if (transfer.toAccount === this) {
-              monthPayments += transfer.amount;
-            } else {
-              monthPayments -= transfer.amount;
+      for (
+        let month = rollUpFreq * rollUpPeriod;
+        month < rollUpFreq * (rollUpPeriod + 1);
+        month++
+      ) {
+        let monthPayments = 0;
+        let endOfMonthBalance = 0;
+        let monthInterest = 0;
+
+        if ((this.start || 0) <= month) {
+          this.transfers.forEach(transfer => {
+            if (
+              (transfer.start <= month &&
+                (month - transfer.start) % transfer.frequency === 0) ||
+              (transfer.frequency === 0 && transfer.start === month)
+            ) {
+              if (transfer.toAccount === this) {
+                monthPayments += transfer.amount;
+              } else {
+                monthPayments -= transfer.amount;
+              }
             }
-          }
-        });
+          });
 
-        curBalance = prevBalance + monthPayments;
-        interest = monthRate * curBalance;
+          endOfMonthBalance = prevBalance + monthPayments;
+          monthInterest = monthRate * endOfMonthBalance;
 
-        curBalance += interest;
+          endOfMonthBalance += monthInterest;
 
-        prevBalance = curBalance;
+          // accumulate the roll up quantities
+          rollupPayments += monthPayments;
+          rollupInterest += monthInterest;
+
+          prevBalance = endOfMonthBalance;
+        }
       }
 
       let cashFlow = new LoanCashFlow();
-      cashFlow.balance = curBalance;
-      cashFlow.month = month;
-      cashFlow.payments = monthPayments;
-      cashFlow.interest = interest;
+      cashFlow.balance = prevBalance;
+      cashFlow.month = rollUpPeriod;
+      cashFlow.payments = rollupPayments;
+      cashFlow.interest = rollupInterest;
 
       cashFlowsOut.push(cashFlow);
     }
+
+    // roll up the monthly amounts into a period
+
+    //
 
     return cashFlowsOut;
   }
@@ -74,6 +92,7 @@ export class LoanAccount {
 export class LoanCashFlow {
   balance: number;
   payments: number;
+  // TODO: rename this from month since it can now vary
   month: number;
   interest: number;
 }
@@ -113,8 +132,8 @@ export class SampleData {
 
     let xfer = new Transfer();
     xfer.amount = 100;
-    xfer.start = 0;
-    xfer.frequency = 1;
+    xfer.start = 6;
+    xfer.frequency = 0;
     xfer.toAccount = loanAcct;
     xfer.fromAccount = cashAcct;
 
