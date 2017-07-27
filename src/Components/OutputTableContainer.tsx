@@ -6,8 +6,8 @@ import { AccountList } from "./AccountList";
 import { LoanAccount, AccountTypes, Transfer } from "../Models/Account";
 
 import { LoanOutputTable } from "./LoanOutputTable";
-import { CombinedOutputTable } from "./CombinedOutputTable";
-import {} from "./TransferGroup";
+
+import { OutputTable } from "./OutputTable";
 
 interface OutputTableContainerProps {
   accounts: LoanAccount[];
@@ -59,7 +59,7 @@ export class OutputTableContainer extends Component<
 
   getAccountTable(account: LoanAccount) {
     if (this.state.activeAccount === -1) {
-      return <CombinedOutputTable accounts={this.props.accounts} />;
+      return <OutputTable accounts={this.props.accounts} />;
     }
 
     if (account === undefined) {

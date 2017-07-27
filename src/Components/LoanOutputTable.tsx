@@ -6,7 +6,8 @@ import { Transfer, LoanAccount } from "../Models/Account";
 
 import { TransferGroup } from "./TransferGroup";
 import { handleInput, $N } from "../Helpers/Functions";
-import { Chart } from "./Chart";
+
+import { OutputTable } from "./OutputTable";
 
 interface LoanOutputTableProps {
   account: LoanAccount;
@@ -86,13 +87,6 @@ export class LoanOutputTable extends Component<
   }
 
   render() {
-    let amounts = this.props.account.getCashFlows(
-      this.state.monthsToDisplay,
-      this.state.rollUpFreq
-    );
-
-    console.log("amounts", amounts);
-
     let inputColumns = [
       "name",
       "startingBalance",
@@ -154,51 +148,7 @@ export class LoanOutputTable extends Component<
             this.props.handleTransferChange(xfer, shouldRemove)}
         />
 
-        <h3>output table</h3>
-
-        <div>
-          <FormControl
-            type="text"
-            value={this.state.monthsToDisplay}
-            onChange={(e: any) => this.handleDisplayChange(e.target.value)}
-          />
-          <FormControl
-            type="text"
-            value={this.state.rollUpFreq}
-            onChange={(e: any) => this.handleRollUpChange(e.target.value)}
-          />
-        </div>
-
-        <Table striped={true} bordered={true} hover={true}>
-          <thead>
-            <tr>
-              <th>month</th>
-              <th>balance remaining</th>
-              <th>net</th>
-              <th>interest</th>
-            </tr>
-          </thead>
-          <tbody>
-            {amounts.map((amount, index) =>
-              <tr key={index}>
-                <td>
-                  {amount.month}
-                </td>
-                <td>
-                  {amount.balance.toFixed(0)}
-                </td>
-                <td>
-                  {amount.payments.toFixed(0)}
-                </td>
-                <td>
-                  {amount.interest.toFixed(0)}
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </Table>
-
-        <Chart data={amounts} />
+        <OutputTable accounts={[this.props.account]} />
       </div>
     );
   }

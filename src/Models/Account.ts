@@ -20,6 +20,36 @@ export class LoanAccount {
 
   id: number;
 
+  static getCashFlowsFromAccounts(
+    accounts: LoanAccount[],
+    rollUpPeriods: number = 24,
+    rollUpFreq: number = 1
+  ) {
+    let cashFlows: LoanCashFlow[][] = [];
+
+    accounts.forEach(account => {
+      if (account.id > -1) {
+        cashFlows.push(account.getCashFlows(rollUpPeriods, rollUpFreq));
+      }
+    });
+
+    // combine the cash flows
+    let combinedCashFlow: LoanCashFlow[] = [];
+
+    cashFlows.forEach((cashFlow, index) => {
+      if (index === 0) {
+        // make a copy of the cash flows for the first time through
+        combinedCashFlow = cashFlow.slice();
+      } else {
+        for (let month = 0; month < combinedCashFlow.length; month++) {
+          combinedCashFlow[month].balance += cashFlow[month].balance;
+        }
+      }
+    });
+
+    return combinedCashFlow;
+  }
+
   constructor() {
     this.id = ++LoanAccount._id;
   }
