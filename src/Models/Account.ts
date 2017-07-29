@@ -125,6 +125,32 @@ export class LoanCashFlow {
   // TODO: rename this from month since it can now vary
   month: number;
   interest: number;
+
+  static getPresentValueOfCashFlows(
+    cashFlows: LoanCashFlow[],
+    discountRate: number
+  ) {
+    // iterate through the cash flows
+
+    discountRate = discountRate / 100;
+
+    // PV = FV / (1 + r)^n
+    // where r = rate and n = time period
+
+    let PV = 0;
+
+    cashFlows.forEach(cashFlow => {
+      const time = cashFlow.month;
+      const futureValue = cashFlow.payments;
+
+      PV += futureValue / Math.pow(1 + discountRate, time);
+    });
+
+    const lastCashFlow = cashFlows[cashFlows.length - 1];
+    PV = lastCashFlow.balance / Math.pow(1 + discountRate, lastCashFlow.month);
+
+    return PV;
+  }
 }
 
 export class Transfer {
@@ -168,7 +194,6 @@ export class SampleData {
     xfer.fromAccount = cashAcct;
 
     cashAcct.transfers.push(xfer);
-    //loanAcct.transfers.push(xfer);
 
     const accounts = [cashAcct, loanAcct];
     const transfers = [xfer];

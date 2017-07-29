@@ -8,7 +8,8 @@ import {
   XAxis,
   Tooltip,
   CartesianGrid,
-  YAxis
+  YAxis,
+  ResponsiveContainer
 } from "recharts";
 import { LoanCashFlow } from "../Models/Account";
 
@@ -20,20 +21,19 @@ export class Chart extends Component<ChartProps> {
   render() {
     return (
       <div>
-        <LineChart
-          width={400}
-          height={400}
-          data={this.props.data}
-          margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
-        >
-          <XAxis dataKey="month" />
-          <YAxis />
-          <Tooltip />
-          <CartesianGrid />
-          <Line type="monotone" dataKey="balance" />
-          <Line type="monotone" dataKey="payments" />
-          
-        </LineChart>
+        <ResponsiveContainer height={400}>
+          <LineChart
+            data={this.props.data}
+            margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
+          >
+            <XAxis dataKey="month" />
+            <YAxis />
+            <Tooltip />
+            <CartesianGrid />
+            <Line type="monotone" dataKey="balance" />
+            <Line type="monotone" dataKey="payments" />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     );
   }
